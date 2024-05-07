@@ -1,0 +1,103 @@
+<div class="stepper-container mt-5">
+  <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
+  </div>
+  <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
+      <div class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#F16E00] to-[#F16E00] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+  </div>
+  <mat-stepper [linear]="isLinear" #stepper class="m-5 shadow-lg rounded-sm">
+    <form [formGroup]="infosEntrepriseForm" class="form-column">
+      <mat-step [stepControl]="infosEntrepriseForm" errorMessage="Les informations sur l'entreprise sont requises.">
+        <ng-template matStepLabel>Informations sur l'entreprise</ng-template>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Nom de l'entreprise</mat-label>
+          <input matInput placeholder="Entrez le nom de votre entreprise" formControlName="companyName" required>
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Bio</mat-label>
+          <textarea matInput placeholder="Rédigez une brève description de votre entreprise" formControlName="bio" required></textarea>
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Secteur d'activité</mat-label>
+          <input matInput placeholder="Entrez votre secteur d'activité" formControlName="activitySector" required>
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Adresse</mat-label>
+          <input matInput placeholder="Entrez l'adresse de l'entreprise" formControlName="addressCompany" required>
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Email de l'entreprise</mat-label>
+          <input matInput placeholder="Entrez l'e-mail de l'entreprise" formControlName="companyEmail" required>
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Numéro de telephone de l'entreprise</mat-label>
+          <input matInput placeholder="Entrez le numéro de telephone de l'entreprise" formControlName="companyPhoneNumber" required>
+        </mat-form-field>
+        <div class="col-span-full m-2">
+          <label for="cover-photo" class="block text-center text-sm font-medium leading-6 text-gray-900">Logo entreprise</label>
+          <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+            <div class="text-center">
+              <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
+              </svg>
+              <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-orange-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                  <span>Upload a file</span>
+                  <input id="file-upload" name="companyLogo" type="file" (change)="onFileChange($event)" class="sr-only" accept="image/jpeg, image/png, image/bmp">
+                </label>
+                <p class="pl-1">or drag and drop</p>
+              </div>
+              <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p>Veuillez remplir tous les champs obligatoires pour continuer.</p>
+          <button mat-button matStepperNext>Suivant</button>
+        </div>
+      </mat-step>
+    </form>
+    <form [formGroup]="infosPersonnellesForm" class="form-column">
+      <mat-step [stepControl]="infosPersonnellesForm" errorMessage="Les informations personnelles sont requises.">
+        <ng-template matStepLabel>Informations personnelles</ng-template>
+        <div class="form-field">
+          <mat-form-field class="smaller-form-field">
+            <mat-label>Nom complet</mat-label>
+            <input matInput placeholder="Entrez votre nom complet" formControlName="recruiterFullName" required>
+          </mat-form-field>
+          <mat-form-field class="smaller-form-field">
+            <mat-label>Titre professionnel</mat-label>
+            <input matInput placeholder="Entrez votre titre professionnel" formControlName="recruiterProfessionalTitle" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <p>Veuillez remplir tous les champs obligatoires pour continuer.</p>
+          <button mat-button matStepperPrevious>Précédent</button>
+          <button mat-button matStepperNext>Suivant</button>
+        </div>
+      </mat-step>
+    </form>
+    <form [formGroup]="infosConnexionForm" class="form-column">
+      <mat-step [stepControl]="infosConnexionForm" errorMessage="Les informations de connexion sont requises.">
+        <ng-template matStepLabel>Informations de connexion</ng-template>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Entrez votre adresse username" formControlName="username" required type="text">
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="Entrez votre adresse e-mail" formControlName="email" required type="email">
+        </mat-form-field>
+        <mat-form-field class="smaller-form-field">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput placeholder="Entrez votre mot de passe" formControlName="password" required type="password">
+        </mat-form-field>
+        <div>
+          <p>Choisissez un mot de passe fort pour sécuriser votre compte.</p>
+          <button mat-button matStepperPrevious>Précédent</button>
+          <button mat-button (click)="submitSignup()">Soumettre</button>
+        </div>
+      </mat-step>
+    </form>
+  </mat-stepper>
+</div>
+

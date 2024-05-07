@@ -1,0 +1,19 @@
+.stepper-container {
+  margin: 0px auto; /* Adjust the margin as needed */
+  width: 55%;
+  display: flex;
+  align-items: center; /* Adjust the width of the stepper container */
+}
+
+.smaller-form-field {
+  width: 50%;
+  display: flex;
+  margin: 0 auto;
+}
+
+.form-field {
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+}
+

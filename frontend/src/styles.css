@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import 'animate.css';
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.mat-step-header .mat-step-icon {
+    background-color: #FF7900; 
+  }
+  
+  .mat-step-label {
+    font-size: 16px; 
+  }
+  
+  /* Change stepper line color */
+  .mat-step-header .mat-step-indicator {
+    background-color: #FF7900; 
+  }
+
+  

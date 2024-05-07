@@ -1,0 +1,20 @@
+.profiles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 10px;
+  }
+  
+  .profile-card {
+    width: 800px;
+  }
+  
+  .profile-image {
+    background-size: cover;
+    background-position: center;
+  }
+
+
+  

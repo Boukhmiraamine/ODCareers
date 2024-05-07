@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>{{ data.job.title }}</h2>
+<mat-dialog-content>
+  <p><strong>Location:</strong> {{ data.job.location }}</p>
+  <p>{{ data.job.companyDescription }}</p>
+  
+  <p><strong>Responsibilities:</strong></p>
+  <ul>
+    <li>
+      {{ data.job.responsibilities}}
+    </li>
+  </ul>
+  
+  <p><strong>Requirements:</strong></p>
+  <ul>
+    <li>
+      {{ data.job.requirements }}
+    </li>
+  </ul>
+
+  <p><strong>Candidates :</strong></p>
+  <ul>
+    <li>
+      {{ data.job.candidateCount }}
+    </li>
+  </ul>
+  
+  <p>This is a fantastic opportunity to engage in a positive and creative work environment that offers excellent benefits and flexible schedules.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close routerLink="/offresCandidates">
+    View {{ data.job.candidateCount }} Candidates
+  </button>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
+

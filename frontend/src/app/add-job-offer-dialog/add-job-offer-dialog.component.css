@@ -1,0 +1,48 @@
+/* Dialog Content Styling */
+h2.mat-dialog-title {
+    color: #333;
+    margin: 0;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  mat-label {
+    color: #666;
+  }
+  
+  mat-select {
+    width: 100%;
+  }
+  
+  .skills-container {
+    margin-bottom: 15px;
+  }
+  
+  .skills-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-container mat-checkbox {
+    margin-right: 10px;
+  }
+  
+  /* Dialog Actions Styling */
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+  
+  mat-dialog-actions button {
+    margin-left: 10px;
+  }
+  

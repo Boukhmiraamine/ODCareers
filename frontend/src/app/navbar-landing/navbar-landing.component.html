@@ -1,0 +1,38 @@
+<header class=" fixed inset-x-0 top-0 z-10 w-full bg-transparent">
+  <div class="px-4 mx-auto sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+          <div class="flex-shrink-0">
+              <a href="#" title="Logo" class="flex">
+                  <img class="w-16 h-16 mt-1 ml-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/2048px-Orange_logo.svg.png" alt="" />
+              </a>
+          </div>
+
+          <button type="button" class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
+              <!-- Menu open: "hidden", Menu closed: "block" -->
+              <svg class="block w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+
+              <!-- Menu open: "block", Menu closed: "hidden" -->
+              <svg class="hidden w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+          </button>
+
+          <div class="hidden ml-auto lg:flex lg:items-center lg:justify-center lg:space-x-10">
+
+              <div routerLink="/" title="" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200 hover:text-opacity-80"> Home </div>
+              
+              <div href="#" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> Features </div>
+
+              <div href="#" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> About </div>
+
+              <div href="#" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> Resources </div>
+
+              <div routerLink="/contact" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> Contact </div>
+
+              <div routerLink="/login" title="" class="inline-flex items-center justify-center px-4 py-2 text-base font-semibold transition-all duration-200 rounded-full bg-orange-500 text-white hover:bg-orange-700 focus:bg-orange-600" role="button"> Log-in </div>
+          </div>
+      </div>
+  </div>
+</header>
