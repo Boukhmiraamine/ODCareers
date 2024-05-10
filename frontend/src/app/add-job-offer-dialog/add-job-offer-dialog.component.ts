@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../auth-service.service';
 
 @Component({
@@ -9,35 +10,52 @@ import { AuthService } from '../auth-service.service';
   styleUrls: ['./add-job-offer-dialog.component.css']
 })
 export class AddJobOfferDialogComponent implements OnInit {
-    skills: string[] = ['Programming', 'Design', 'Management', 'Communication', 'Problem Solving'];
-    selectedSkills: { [key: string]: boolean } = {};
-  
-    constructor(
-      public dialogRef: MatDialogRef<AddJobOfferDialogComponent>,
-      private authService: AuthService // Inject JobService
-    ) { }
-  
-    ngOnInit(): void {
+  @ViewChild('jobOfferForm') jobOfferForm!: NgForm;
+  skills: string[] = ['Programming', 'Design', 'Management', 'Communication', 'Problem Solving'];
+  selectedSkills: { [key: string]: boolean } = {};
+  loggedInRecruiterId: string | null = null;
+
+  constructor(
+    public dialogRef: MatDialogRef<AddJobOfferDialogComponent>,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit(): void {
+    this.loggedInRecruiterId = this.authService.getLoggedInRecruiterId();
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+  submitJobOffer(formData: any): void {
+    if (!this.jobOfferForm.valid) {
+      this.snackBar.open('Please fill in all required fields.', 'Close', { duration: 3000 });
+      return;
     }
-  
-    closeDialog(): void {
-      this.dialogRef.close();
+
+    if (!this.loggedInRecruiterId) {
+      this.snackBar.open('No recruiter logged in.', 'Close', { duration: 3000 });
+      return;
     }
-  
-    submitJobOffer(jobOfferForm: NgForm): void {
-      if (jobOfferForm.valid) {
-        const formData = jobOfferForm.value;
-        const selectedSkillsArray = Object.keys(this.selectedSkills).filter(skill => this.selectedSkills[skill]);
-        formData.requiredSkills = selectedSkillsArray;
-        this.authService.addJob(formData).subscribe({
-          next: (response) => {
-            console.log('Job added successfully', response);
-            this.dialogRef.close(response);
-          },
-          error: (error) => {
-            console.error('Failed to add job', error);
-          }
-        });
+
+    formData.recruiter = this.loggedInRecruiterId;
+    formData.requiredSkills = Object.keys(this.selectedSkills).filter(skill => this.selectedSkills[skill]);
+
+    this.authService.addJob(formData).subscribe({
+      next: (response) => {
+        this.snackBar.open('Job offer added successfully', 'Close', { duration: 4000 });
+        this.dialogRef.close(response);
+      },
+      error: (error) => {
+        console.error('Failed to add job', error);
+        this.snackBar.open('Failed to add job', 'Close', { duration: 3000 });
+      },
+      complete: () => {
+        this.jobOfferForm.resetForm();
+        this.selectedSkills = {};
       }
-    }
+    });
+  }
 }

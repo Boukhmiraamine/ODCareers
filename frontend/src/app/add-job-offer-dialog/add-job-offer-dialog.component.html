@@ -1,59 +1,68 @@
 <h2 mat-dialog-title>Add Job Offer</h2>
 <div mat-dialog-content>
-  <!-- Job Offer Form -->
   <form #jobOfferForm="ngForm" (ngSubmit)="submitJobOffer(jobOfferForm.value)">
-    <!-- Job Title -->
     <mat-form-field appearance="fill">
       <mat-label>Job Title</mat-label>
-      <input matInput name="jobTitle" ngModel required>
+      <input matInput name="title" ngModel required>
     </mat-form-field>
 
-    <!-- Job Description -->
     <mat-form-field appearance="fill">
       <mat-label>Job Description</mat-label>
-      <textarea matInput name="jobDescription" ngModel required></textarea>
+      <textarea matInput name="description" ngModel required></textarea>
     </mat-form-field>
 
-    <!-- Salary -->
     <mat-form-field appearance="fill">
-      <mat-label>Salary</mat-label>
-      <input matInput name="salary" ngModel type="number" required>
+      <mat-label>City</mat-label>
+      <input matInput name="city" ngModel required>
     </mat-form-field>
 
-    <!-- Location -->
     <mat-form-field appearance="fill">
-      <mat-label>Location</mat-label>
-      <input matInput name="location" ngModel>
+      <mat-label>Domain</mat-label>
+      <input matInput name="domain" ngModel required>
     </mat-form-field>
 
-    <!-- Company Name -->
     <mat-form-field appearance="fill">
-      <mat-label>Company Name</mat-label>
-      <input matInput name="companyName" ngModel>
+      <mat-label>Function</mat-label>
+      <input matInput name="function" ngModel required>
     </mat-form-field>
 
-    <!-- Employment Type -->
+    <mat-form-field appearance="fill">
+      <mat-label>Education Level</mat-label>
+      <input matInput name="educationLevel" ngModel required>
+    </mat-form-field>
+
     <mat-form-field appearance="fill">
       <mat-label>Employment Type</mat-label>
-      <mat-select name="employmentType" ngModel>
-        <mat-option value="fullTime">Full Time</mat-option>
-        <mat-option value="partTime">Part Time</mat-option>
-        <mat-option value="contract">Contract</mat-option>
-        <mat-option value="freelance">Freelance</mat-option>
+      <mat-select name="contractType" ngModel required>
+        <mat-option value="Full-Time">Full Time</mat-option>
+        <mat-option value="Part-Time">Part Time</mat-option>
+        <mat-option value="Contract">Contract</mat-option>
+        <mat-option value="Freelance">Freelance</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <!-- Required Skills -->
+    <mat-form-field appearance="fill">
+      <mat-label>Salary</mat-label>
+      <input matInput name="salary" type="number" ngModel required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Recruiter ID</mat-label>
+      <input matInput [value]="loggedInRecruiterId" disabled>
+    </mat-form-field>
+    
+
     <div class="skills-container">
       <p class="skills-label">Required Skills:</p>
       <div *ngFor="let skill of skills" class="checkbox-container">
         <mat-checkbox [(ngModel)]="selectedSkills[skill]" [value]="skill" name="requiredSkills">{{ skill }}</mat-checkbox>
       </div>
     </div>
+
   </form>
 </div>
 
 <div mat-dialog-actions>
   <button mat-button (click)="closeDialog()">Cancel</button>
-  <button mat-button type="submit" [disabled]="!jobOfferForm.valid">Add</button>
+  <button mat-button (click)="submitJobOffer(jobOfferForm.value)" type="submit" >Add</button>
 </div>

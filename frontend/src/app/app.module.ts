@@ -37,6 +37,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ModifyJobOfferDialogComponent } from './modify-job-offer-dialog/modify-job-offer-dialog.component';
 import { HomecandidateComponent } from './homecandidate/homecandidate.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -86,7 +87,12 @@ import { HomecandidateComponent } from './homecandidate/homecandidate.component'
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   exports: [
     MatButtonModule,

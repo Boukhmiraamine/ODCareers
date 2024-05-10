@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 //const { authenticate } = require('../middlewares/authMiddleware');
 const { addEducation, addExperience, addCertification } = require('../controllers/profileController');
@@ -30,4 +30,4 @@ router.delete('/certification/:id', deleteCertification);
 
 router.put('/personal-info', updatePersonalInfo);
 
-module.exports = router;
+module.exports = router;*/
