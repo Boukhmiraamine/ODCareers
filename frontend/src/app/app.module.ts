@@ -38,6 +38,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ModifyJobOfferDialogComponent } from './modify-job-offer-dialog/modify-job-offer-dialog.component';
 import { HomecandidateComponent } from './homecandidate/homecandidate.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ApplyConfirmationDialogComponent } from './apply-confirmation-dialog/apply-confirmation-dialog.component';
+import { SnackbarComfirmationApplyJobComponent } from './snackbar-comfirmation-apply-job/snackbar-comfirmation-apply-job.component';
+import { JobDetailComponent } from './job-detail/job-detail.component';
 
 
 
@@ -61,7 +65,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     OffresCandidatesComponent,
     AddJobOfferDialogComponent,
     ModifyJobOfferDialogComponent,
-    HomecandidateComponent
+    HomecandidateComponent,
+    ApplyConfirmationDialogComponent,
+    SnackbarComfirmationApplyJobComponent,
+    JobDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -93,6 +100,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatButtonModule,
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     MatButtonModule,

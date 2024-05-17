@@ -1,0 +1,18 @@
+<!-- job-detail.component.html -->
+<div *ngIf="job; else noJob">
+    <h1>{{ job.title }}</h1>
+    <h2>{{ job.company }}</h2>
+    <p><strong>Location:</strong> {{ job.location }}</p>
+    <p><strong>Description:</strong> {{ job.description }}</p>
+    <p><strong>Skills:</strong></p>
+    <ul>
+      <li *ngFor="let skill of job.skills">{{ skill }}</li>
+    </ul>
+    <p><strong>Match Score:</strong> {{ job.matchScore }}%</p>
+    <p><strong>Details:</strong> {{ job.details }}</p>
+    <button mat-raised-button color="primary">Final Apply</button>
+  </div>
+  <ng-template #noJob>
+    <p>Job details not available.</p>
+  </ng-template>
+  

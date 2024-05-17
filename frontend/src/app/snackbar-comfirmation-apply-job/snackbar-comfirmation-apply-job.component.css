@@ -1,0 +1,12 @@
+.snackbar-container {
+    display: flex;
+    align-items: center;
+  }
+  mat-icon {
+    margin-right: 8px;
+    color: #4caf50;
+
+  }
+  span {
+    color: #fff;
+  }

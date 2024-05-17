@@ -9,6 +9,7 @@ import { ContactComponent } from './contact/contact.component';
 import { HomeRecruiterComponent } from './home-recruiter/home-recruiter.component';
 import { OffresCandidatesComponent } from './offres-candidates/offres-candidates.component';
 import { HomecandidateComponent } from './homecandidate/homecandidate.component';
+import { JobDetailComponent } from './job-detail/job-detail.component';
 
 const routes: Routes = [
   { path: '', component: HomeLandingComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'homerecruiter' , component: HomeRecruiterComponent },
   { path: 'homecandidate' , component: HomecandidateComponent },
-  { path: 'offresCandidates' , component: OffresCandidatesComponent }
+  { path: 'offresCandidates' , component: OffresCandidatesComponent },
+  { path: 'job-detail', component: JobDetailComponent }
   
 ];
 
