@@ -51,18 +51,16 @@
       <input matInput [value]="loggedInRecruiterId" disabled>
     </mat-form-field>
     
-
     <div class="skills-container">
       <p class="skills-label">Required Skills:</p>
       <div *ngFor="let skill of skills" class="checkbox-container">
         <mat-checkbox [(ngModel)]="selectedSkills[skill]" [value]="skill" name="requiredSkills">{{ skill }}</mat-checkbox>
       </div>
     </div>
-
   </form>
 </div>
 
 <div mat-dialog-actions>
   <button mat-button (click)="closeDialog()">Cancel</button>
-  <button mat-button (click)="submitJobOffer(jobOfferForm.value)" type="submit" >Add</button>
+  <button mat-button (click)="submitJobOffer(jobOfferForm.value)" type="submit">Add</button>
 </div>

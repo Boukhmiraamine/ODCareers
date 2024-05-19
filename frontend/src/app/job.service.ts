@@ -1,17 +1,31 @@
-// job.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
+import { AuthService } from './auth-service.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JobService {
-  private apiUrl = 'http://localhost:3000/api/jobs'; // Adjust to your API URL
+  private jobUrl = 'http://localhost:3000/api/jobs';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders().set('Authorization', token ? token : '');
+  }
 
   getJobs(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any>(this.jobUrl, { headers: this.getAuthHeaders() });
+  }
+
+  createJob(jobData: any): Observable<any> {
+    return this.http.post<any>(`${this.jobUrl}/`, jobData, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error creating job:', error);
+        return throwError(() => new Error('Job creation failed: ' + (error.error?.message || error.statusText)));
+      })
+    );
   }
 }

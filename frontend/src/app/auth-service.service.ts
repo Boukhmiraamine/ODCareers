@@ -13,23 +13,24 @@ interface UserData {
 })
 export class AuthService {
   private baseUrl = 'http://localhost:3000/api/users';
-  private jobUrl = 'http://localhost:3000/api/jobs';
   private loggedInRecruiterId: string | null = null;
+  private token: string | null = null;
 
   constructor(private http: HttpClient) {
-    this.initializeRecruiterId();
+    this.initializeAuthData();
   }
 
-  private initializeRecruiterId(): void {
+  private initializeAuthData(): void {
     this.loggedInRecruiterId = localStorage.getItem('loggedInRecruiterId');
+    this.token = localStorage.getItem('authToken');
   }
 
   login(credentials: { username: string; password: string; userType: string }): Observable<any> {
-    return this.http.post<UserData>(`${this.baseUrl}/signin`, credentials, { observe: 'response' }).pipe(
+    return this.http.post<any>(`${this.baseUrl}/signin`, credentials, { observe: 'response' }).pipe(
       tap(response => {
         const userData = response.body;
-        if (userData && userData.userType === 'recruiter') {
-          this.setLoggedInRecruiterId(userData._id);
+        if (userData && userData.user.role === 'Recruiter') {
+          this.setAuthData(userData.token, userData.user.id);
         }
       }),
       catchError(error => {
@@ -40,13 +41,19 @@ export class AuthService {
   }
 
   logout(): void {
-    this.setLoggedInRecruiterId(null);
+    this.setAuthData(null, null);
   }
 
-  setLoggedInRecruiterId(id: string | null): void {
-    this.loggedInRecruiterId = id;
-    if (id) {
-      localStorage.setItem('loggedInRecruiterId', id);
+  setAuthData(token: string | null, recruiterId: string | null): void {
+    this.token = token;
+    this.loggedInRecruiterId = recruiterId;
+    if (token) {
+      localStorage.setItem('authToken', token);
+    } else {
+      localStorage.removeItem('authToken');
+    }
+    if (recruiterId) {
+      localStorage.setItem('loggedInRecruiterId', recruiterId);
     } else {
       localStorage.removeItem('loggedInRecruiterId');
     }
@@ -56,19 +63,10 @@ export class AuthService {
     return this.loggedInRecruiterId;
   }
 
-  addJob(jobData: any): Observable<any> {
-    if (!this.loggedInRecruiterId) {
-      return throwError(() => new Error('No recruiter logged in'));
-    }
-    jobData.recruiter = this.loggedInRecruiterId;
-    return this.http.post<any>(`${this.jobUrl}/`, jobData);
+  getToken(): string | null {
+    return this.token;
   }
 
-  getAllJobs(): Observable<any> {
-    return this.http.get<any>(`${this.jobUrl}`);
-  }
-
-  
   signUp(data: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/signup`, data, { observe: 'response' });
   }

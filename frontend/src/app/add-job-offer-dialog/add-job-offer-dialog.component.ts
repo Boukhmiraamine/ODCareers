@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../auth-service.service';
+import { JobService } from '../job.service';
 
 @Component({
   selector: 'app-add-job-offer-dialog',
@@ -17,8 +18,9 @@ export class AddJobOfferDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddJobOfferDialogComponent>,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
+    private jobService: JobService,
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +45,7 @@ export class AddJobOfferDialogComponent implements OnInit {
     formData.recruiter = this.loggedInRecruiterId;
     formData.requiredSkills = Object.keys(this.selectedSkills).filter(skill => this.selectedSkills[skill]);
 
-    this.authService.addJob(formData).subscribe({
+    this.jobService.createJob(formData).subscribe({
       next: (response) => {
         this.snackBar.open('Job offer added successfully', 'Close', { duration: 4000 });
         this.dialogRef.close(response);
