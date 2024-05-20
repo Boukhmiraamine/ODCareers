@@ -16,8 +16,12 @@ export class JobService {
     return new HttpHeaders().set('Authorization', token ? token : '');
   }
 
-  getJobs(): Observable<any> {
-    return this.http.get<any>(this.jobUrl, { headers: this.getAuthHeaders() });
+  getJobs(recruiterId?: string): Observable<any> {
+    let params: any = {};
+    if (recruiterId) {
+      params.recruiterId = recruiterId;
+    }
+    return this.http.get<any>(this.jobUrl, { headers: this.getAuthHeaders(), params: params });
   }
 
   createJob(jobData: any): Observable<any> {

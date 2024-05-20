@@ -24,7 +24,7 @@ export class AddJobOfferDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loggedInRecruiterId = this.authService.getLoggedInRecruiterId();
+    this.loggedInRecruiterId = this.authService.getLoggedInUserId();
   }
 
   closeDialog(): void {
@@ -42,6 +42,7 @@ export class AddJobOfferDialogComponent implements OnInit {
       return;
     }
 
+    formData.publicationDate = new Date();
     formData.recruiter = this.loggedInRecruiterId;
     formData.requiredSkills = Object.keys(this.selectedSkills).filter(skill => this.selectedSkills[skill]);
 

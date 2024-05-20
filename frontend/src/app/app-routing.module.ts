@@ -10,19 +10,21 @@ import { HomeRecruiterComponent } from './home-recruiter/home-recruiter.componen
 import { OffresCandidatesComponent } from './offres-candidates/offres-candidates.component';
 import { HomecandidateComponent } from './homecandidate/homecandidate.component';
 import { JobDetailComponent } from './job-detail/job-detail.component';
+import { authGuard } from './auth.guard';
+import { roleGuard } from './role.guard';
+import { loginGuard } from './login.guard';
 
 const routes: Routes = [
   { path: '', component: HomeLandingComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'signup', component: SignupComponent },
   { path: 'signupRecruteur/:userType', component: SignupRecruterComponent },
   { path: 'signupCandidats/:userType', component: SignupCandidatsComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'homerecruiter' , component: HomeRecruiterComponent },
-  { path: 'homecandidate' , component: HomecandidateComponent },
-  { path: 'offresCandidates' , component: OffresCandidatesComponent },
+  { path: 'homerecruiter', component: HomeRecruiterComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Recruiter' } },
+  { path: 'homecandidate', component: HomecandidateComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Candidate' } },
+  { path: 'offresCandidates', component: OffresCandidatesComponent },
   { path: 'job-detail', component: JobDetailComponent }
-  
 ];
 
 @NgModule({

@@ -91,12 +91,13 @@ exports.matchSkills = async (req, res) => {
 
 exports.getJobs = async (req, res) => {
     console.log("Searching jobs with query:", req.query);
-    const { search, contractType, workMode, semanticSearch } = req.query;
+    const { search, contractType, workMode, semanticSearch, recruiterId } = req.query;
 
     let query = {
         isApproved: true,
         ...(contractType && { contractType }),
-        ...(workMode && { workMode })
+        ...(workMode && { workMode }),
+        ...(recruiterId && { recruiter: recruiterId }) // Filter by recruiterId if provided
     };
 
     if (search && !semanticSearch) {

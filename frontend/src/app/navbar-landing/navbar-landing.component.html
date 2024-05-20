@@ -1,38 +1,48 @@
-<header class=" fixed inset-x-0 top-0 z-10 w-full bg-transparent">
-  <div class="px-4 mx-auto sm:px-6 lg:px-8">
+<header class="fixed inset-x-0 top-0 z-10 w-full bg-transparent">
+    <div class="px-4 mx-auto sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 lg:h-20">
-          <div class="flex-shrink-0">
-              <a href="#" title="Logo" class="flex">
-                  <img class="w-16 h-16 mt-1 ml-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/2048px-Orange_logo.svg.png" alt="" />
-              </a>
+        <div class="flex-shrink-0">
+          <a href="#" title="Logo" class="flex">
+            <img class="w-16 h-16 mt-1 ml-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/2048px-Orange_logo.svg.png" alt="" />
+          </a>
+        </div>
+  
+        <button type="button" class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
+          <!-- Menu open: "hidden", Menu closed: "block" -->
+          <svg class="block w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+          <!-- Menu open: "block", Menu closed: "hidden" -->
+          <svg class="hidden w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+  
+        <div class="hidden ml-auto lg:flex lg:items-center lg:justify-center lg:space-x-10">
+          <div routerLink="/" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200"> Home </div>
+          <div routerLink="/homecandidate" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200"> Jobs </div>
+          <div routerLink="/about" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200"> About </div>
+          <div routerLink="/resources" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200"> Resources </div>
+          <div routerLink="/contact" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200"> Contact </div>
+          <div *ngIf="!isLoggedIn" routerLink="/login" class="inline-flex items-center justify-center px-4 py-2 text-base font-semibold transition-all duration-200 rounded-full bg-orange-500 text-white hover:bg-orange-700 focus:bg-orange-600"> Log-in </div>
+          
+          <div *ngIf="isLoggedIn" class="relative inline-block text-left">
+            <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200" (click)="toggleDropdown()">
+              <img class="w-full h-full rounded-full" src="https://via.placeholder.com/150" alt="Avatar">
+            </button>
+            <div *ngIf="dropdownOpen" class="absolute right-0 w-48 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none" role="menu">
+              <div class="px-4 py-3">
+                <p class="text-sm leading-5">Signed in as</p>
+                <p class="text-sm font-medium leading-5 text-gray-900 truncate">{{ loggedInUserId }}</p>
+              </div>
+              <div class="py-1">
+                <a routerLink="/profile" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Profile Settings</a>
+                <a (click)="logout()" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</a>
+              </div>
+            </div>
           </div>
-
-          <button type="button" class="inline-flex p-2 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
-              <!-- Menu open: "hidden", Menu closed: "block" -->
-              <svg class="block w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-
-              <!-- Menu open: "block", Menu closed: "hidden" -->
-              <svg class="hidden w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-          </button>
-
-          <div class="hidden ml-auto lg:flex lg:items-center lg:justify-center lg:space-x-10">
-
-              <div routerLink="/" title="" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200 hover:text-opacity-80"> Home </div>
-              
-              <div routerLink="/homecandidate" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> Jobs </div>
-
-              <div href="#" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> About </div>
-
-              <div href="#" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> Resources </div>
-
-              <div routerLink="/contact" title="" class="text-base font-semibold text-orange-500  hover:text-orange-600  transition-all duration-200 hover:text-opacity-80"> Contact </div>
-
-              <div routerLink="/login" title="" class="inline-flex items-center justify-center px-4 py-2 text-base font-semibold transition-all duration-200 rounded-full bg-orange-500 text-white hover:bg-orange-700 focus:bg-orange-600" role="button"> Log-in </div>
-          </div>
+        </div>
       </div>
-  </div>
-</header>
+    </div>
+  </header>
+  

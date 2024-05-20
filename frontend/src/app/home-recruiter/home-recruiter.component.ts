@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JobService } from '../job.service';
+import { AuthService } from '../auth-service.service';
 import { JobOfferModalViewComponent } from '../job-offer-modal-view/job-offer-modal-view.component';
 import { AddJobOfferDialogComponent } from '../add-job-offer-dialog/add-job-offer-dialog.component';
 import { ModifyJobOfferDialogComponent } from '../modify-job-offer-dialog/modify-job-offer-dialog.component';
@@ -48,7 +49,8 @@ export class HomeRecruiterComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private jobService: JobService
+    private jobService: JobService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +58,8 @@ export class HomeRecruiterComponent implements OnInit {
   }
 
   loadJobOffers(): void {
-    this.jobService.getJobs().subscribe(
+    const recruiterId = this.authService.getLoggedInUserId();
+    this.jobService.getJobs(recruiterId!).subscribe(
       (jobs: Job[]) => {
         this.jobOffers = jobs.map((job: Job) => ({
           ...job,
