@@ -1,6 +1,6 @@
-// job-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JobdataserviceService } from '../jobdataservice.service';
 
 @Component({
   selector: 'app-job-detail',
@@ -10,11 +10,10 @@ import { Router } from '@angular/router';
 export class JobDetailComponent implements OnInit {
   job: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private jobDataService: JobdataserviceService) {}
 
   ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
-    this.job = navigation?.extras?.state?.['job'] ?? null;
+    this.job = this.jobDataService.getJob();
 
     if (this.job) {
       console.log('Job details:', this.job);

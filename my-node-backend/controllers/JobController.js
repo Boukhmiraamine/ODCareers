@@ -5,6 +5,7 @@ const { sendNotification } = require('../helpers/notificationHelper');
 const Notification = require('../models/Notification');
 const axios = require('axios');
 
+// Create a new job
 exports.createJob = async (req, res) => {
     try {
         const newJob = new Job({ ...req.body, isApproved: false });
@@ -15,17 +16,24 @@ exports.createJob = async (req, res) => {
     }
 };
 
+// Get all jobs with optional filtering by recruiter ID
 exports.getAllJobs = async (req, res) => {
     try {
-        const jobs = await Job.find({ isApproved: true }).populate('recruiter');
+        const { recruiterId } = req.query;
+        const query = { isApproved: true };
+        if (recruiterId) {
+            query.recruiter = recruiterId;
+        }
+        const jobs = await Job.find(query).populate('recruiter');
         res.status(200).json(jobs);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
+// Get job by ID
 exports.getJobById = async (req, res) => {
-    console.log("Fetching job by ID:", req.params.id); 
+    console.log("Fetching job by ID:", req.params.id);
     try {
         const job = await Job.findById(req.params.id).populate('recruiter');
         if (!job) {
@@ -41,6 +49,7 @@ exports.getJobById = async (req, res) => {
     }
 };
 
+// Update a job
 exports.updateJob = async (req, res) => {
     try {
         const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -53,6 +62,7 @@ exports.updateJob = async (req, res) => {
     }
 };
 
+// Delete a job
 exports.deleteJob = async (req, res) => {
     try {
         const result = await Job.findByIdAndDelete(req.params.id);
@@ -65,6 +75,7 @@ exports.deleteJob = async (req, res) => {
     }
 };
 
+// Match skills for a job and candidate
 exports.matchSkills = async (req, res) => {
     const { jobId, candidateId } = req.params;
     const job = await Job.findById(jobId);
@@ -89,9 +100,10 @@ exports.matchSkills = async (req, res) => {
     }
 };
 
+// Get jobs with optional search and pagination
 exports.getJobs = async (req, res) => {
     console.log("Searching jobs with query:", req.query);
-    const { search, contractType, workMode, semanticSearch, recruiterId } = req.query;
+    const { search, contractType, workMode, semanticSearch, recruiterId, page = 1, pageSize = 10 } = req.query;
 
     let query = {
         isApproved: true,
@@ -100,16 +112,15 @@ exports.getJobs = async (req, res) => {
         ...(recruiterId && { recruiter: recruiterId }) // Filter by recruiterId if provided
     };
 
-    if (search && !semanticSearch) {
-        query.$text = { $search: search };
-        try {
-            const jobs = await Job.find(query).populate('recruiter');
-            res.status(200).json(jobs);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    } else if (search && semanticSearch) {
-        try {
+    try {
+        let jobs;
+        if (search && !semanticSearch) {
+            query.$text = { $search: search };
+            jobs = await Job.find(query)
+                            .populate('recruiter')
+                            .skip((page - 1) * pageSize)
+                            .limit(Number(pageSize));
+        } else if (search && semanticSearch) {
             const allJobs = await Job.find({ isApproved: true }).lean();
             const descriptions = allJobs.map(job => job.description);
 
@@ -122,22 +133,23 @@ exports.getJobs = async (req, res) => {
                 return res.status(404).json({ message: 'No matching jobs found' });
             } else {
                 const matchedJobs = allJobs.filter(job => response.data.some(match => match.description === job.description));
-                res.status(200).json(matchedJobs);
+                jobs = matchedJobs.slice((page - 1) * pageSize, page * pageSize);
             }
-        } catch (error) {
-            console.error('Error when calling the Python API:', error.message);
-            res.status(500).json({ message: "Failed to call Python API", error: error.message });
+        } else {
+            jobs = await Job.find(query)
+                            .populate('recruiter')
+                            .skip((page - 1) * pageSize)
+                            .limit(Number(pageSize));
         }
-    } else {
-        try {
-            const jobs = await Job.find(query).populate('recruiter');
-            res.status(200).json(jobs);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
+
+        const totalJobs = await Job.countDocuments(query);
+        res.status(200).json({ jobs, totalJobs });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
+// Apply to a job
 exports.applyToJob = async (req, res) => {
     const { candidateId } = req.candidate;
     const { jobId } = req.params;
@@ -159,15 +171,15 @@ exports.applyToJob = async (req, res) => {
         });
         await newApplication.save();
 
-        // Envoyer une notification au recruteur
+        // Send notification to recruiter
         const candidate = await Candidate.findById(candidateId);
         const newNotification = new Notification({
             recipientType: 'Recruiter',
             recipient: job.recruiter._id,
             senderType: 'Candidate',
             sender: candidateId,
-            message: `Le candidat ${candidate.fullName} a postulé à votre offre: ${job.title}. Veuillez consulter son profil.`,
-            link: `/jobs/${jobId}/applications` // Assurez-vous que ce lien mène à un endroit pertinent dans votre application
+            message: `Candidate ${candidate.fullName} applied to your job: ${job.title}. Please review their profile.`,
+            link: `/jobs/${jobId}/applications`
         });
         await newNotification.save();
 
@@ -177,6 +189,7 @@ exports.applyToJob = async (req, res) => {
     }
 };
 
+// Get applications by job ID
 exports.getApplicationsByJob = async (req, res) => {
     const { jobId } = req.params;
 
@@ -196,34 +209,7 @@ exports.getApplicationsByJob = async (req, res) => {
     }
 };
 
-/*exports.updateApplicationStatus = async (req, res) => {
-    const { applicationId, status } = req.body;
-
-    try {
-        const application = await Application.findById(applicationId);
-        if (!application) {
-            return res.status(404).json({ message: "Application not found" });
-        }
-
-        application.status = status;
-        await application.save();
-
-        // Notify candidate of status change
-        await sendNotification(
-            req.user._id,
-            'Recruiter',
-            application.candidate,
-            'Candidate',
-            `Your application status has been updated to ${status}.`,
-            `/applications/${applicationId}`
-        );
-
-        res.status(200).json({ message: "Application status updated successfully", application });
-    } catch (error) {
-        res.status(500).json({ message: "Failed to update application status", error: error.message });
-    }
-};*/
-
+// Update application status
 exports.updateApplicationStatus = async (req, res) => {
     const { applicationId } = req.params;
     const { status } = req.body;
@@ -233,7 +219,7 @@ exports.updateApplicationStatus = async (req, res) => {
             path: 'job',
             populate: {
                 path: 'recruiter',
-                select: 'companyName'  // Assurez-vous que le modèle Recruiter a un champ companyName
+                select: 'companyName'
             }
         });
         if (!application) {
@@ -243,8 +229,8 @@ exports.updateApplicationStatus = async (req, res) => {
         application.status = status;
         await application.save();
 
-        const jobTitle = application.job.title;  // Titre du poste à partir de l'objet job lié
-        const recruiterName = application.job.recruiter.companyName;  // Nom du recruteur à partir de l'objet recruiter lié
+        const jobTitle = application.job.title;
+        const recruiterName = application.job.recruiter.companyName;
 
         const notificationMessage = `Your application for the position ${jobTitle} has been updated to ${status} by ${recruiterName}.`;
 
@@ -256,7 +242,7 @@ exports.updateApplicationStatus = async (req, res) => {
             notificationMessage,
             `/applications/${applicationId}`
         );
-        
+
         res.status(200).json({ message: "Application status updated successfully", application });
     } catch (error) {
         console.error("Failed to update application status:", error);

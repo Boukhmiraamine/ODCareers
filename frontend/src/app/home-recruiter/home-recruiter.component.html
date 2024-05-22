@@ -158,8 +158,14 @@
                 </div>
                 <!-- End of job offers list -->
               </div>
-              <mat-paginator [length]="totalJobs" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)" aria-label="Job offers paginator"></mat-paginator>
-            </main>
+              <mat-paginator
+              [length]="totalJobs"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="onPageChange($event)"
+              aria-label="Job offers paginator">
+            </mat-paginator>            
+          </main>
           </div>
         </div>
       </section>

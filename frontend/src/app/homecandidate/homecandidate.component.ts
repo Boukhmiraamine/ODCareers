@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { JobService } from '../job.service';
+import { PageEvent } from '@angular/material/paginator';
+import { JobdataserviceService } from '../jobdataservice.service';
 
 interface Job {
   _id: string;
@@ -47,17 +49,21 @@ interface Job {
 })
 export class HomecandidateComponent implements OnInit {
   jobs: Job[] = [];
+  pagedJobs: Job[] = [];
   loading: Job | null = null;
   mobileFiltersOpen = false;
   sortMenuOpen = false;
   colorFiltersOpen = false;
   categoryFiltersOpen = false;
+  pageSize = 10;
+  currentPage = 0;
 
   constructor(
     private router: Router,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private jobService: JobService
+    private jobService: JobService,
+    private jobDataService: JobdataserviceService
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +74,7 @@ export class HomecandidateComponent implements OnInit {
           expanded: false,
           showMatchingSkills: false
         }));
+        this.updatePagedJobs();
       },
       error => {
         console.error('Error fetching jobs', error);
@@ -88,7 +95,8 @@ export class HomecandidateComponent implements OnInit {
   }
 
   applyForJob(job: Job) {
-    this.router.navigate(['/job-detail'], { state: { job } });
+    this.jobDataService.setJob(job);
+    this.router.navigate(['/job-detail']);
   }
 
   toggleMobileFilters() {
@@ -114,5 +122,17 @@ export class HomecandidateComponent implements OnInit {
 
   toggleGridView() {
     console.log('Toggling grid view');
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.updatePagedJobs();
+  }
+
+  private updatePagedJobs() {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.pagedJobs = this.jobs.slice(startIndex, endIndex);
   }
 }

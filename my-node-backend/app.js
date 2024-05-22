@@ -14,8 +14,9 @@ const app = express();
 
 // Use cors middleware
 app.use(cors());
+app.use(express.json()); // Use express built-in JSON parser
+app.use(express.urlencoded({ extended: true })); // Use express built-in URL-encoded parser
 
-app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/tests', testRoutes);

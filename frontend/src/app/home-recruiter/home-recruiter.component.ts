@@ -39,10 +39,11 @@ interface Job {
   styleUrls: ['./home-recruiter.component.css']
 })
 export class HomeRecruiterComponent implements OnInit {
-  totalJobs = 100; // Total number of jobs, this should come from your backend
+  totalJobs = 0; // Total number of jobs, will be set from the backend response
   pageSize = 10; // Default page size
   pageSizeOptions = [5, 10, 20];
   currentPage = 0;
+  recruiterId: string | null = null;
 
   jobOffers: Job[] = [];
 
@@ -58,19 +59,27 @@ export class HomeRecruiterComponent implements OnInit {
   }
 
   loadJobOffers(): void {
-    const recruiterId = this.authService.getLoggedInUserId();
-    this.jobService.getJobs(recruiterId!).subscribe(
-      (jobs: Job[]) => {
-        this.jobOffers = jobs.map((job: Job) => ({
-          ...job,
-          expanded: false,
-          showMatchingSkills: false
-        }));
-      },
-      error => {
-        console.error('Error fetching jobs', error);
-      }
-    );
+    this.recruiterId = this.authService.getLoggedInUserId();
+    if (this.recruiterId) {
+      this.jobService.getJobs(this.recruiterId, /*this.currentPage + 1, this.pageSize*/).subscribe(
+        response => {
+          if (response && response.jobs) {
+            console.log("Jobs loaded:", response.jobs);
+            this.jobOffers = response.jobs.map((job: Job) => ({
+              ...job,
+              expanded: false,
+              showMatchingSkills: false
+            }));
+            this.totalJobs = response.totalJobs;
+          } else {
+            console.error("Invalid response structure", response);
+          }
+        },
+        error => {
+          console.error('Error fetching jobs:', error);
+        }
+      );
+    }
   }
 
   openDialog(job: Job): void {

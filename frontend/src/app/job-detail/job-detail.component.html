@@ -1,18 +1,57 @@
-<!-- job-detail.component.html -->
-<div *ngIf="job; else noJob">
-    <h1>{{ job.title }}</h1>
-    <h2>{{ job.company }}</h2>
-    <p><strong>Location:</strong> {{ job.location }}</p>
-    <p><strong>Description:</strong> {{ job.description }}</p>
-    <p><strong>Skills:</strong></p>
-    <ul>
-      <li *ngFor="let skill of job.skills">{{ skill }}</li>
-    </ul>
-    <p><strong>Match Score:</strong> {{ job.matchScore }}%</p>
-    <p><strong>Details:</strong> {{ job.details }}</p>
-    <button mat-raised-button color="primary">Final Apply</button>
+
+<div *ngIf="job; else noJob" class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md mt-20">
+  <div class="bg-secondary-light p-6 rounded-lg shadow-md mb-6">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center">
+      <img [src]="job.imageURL || 'assets/default-job-img.jpg'" alt="{{ job.title }}" class="w-full lg:w-1/4 h-48 lg:h-auto object-cover mb-4 lg:mb-0 lg:mr-6 rounded-lg">
+      <div class="flex-1">
+        <h1 class="text-2xl font-bold text-black flex items-center"><i class="fas fa-briefcase mr-2"></i>{{ job.title }}</h1>
+        <h2 class="text-xl font-semibold text-secondary flex items-center"><i class="fas fa-building mr-2"></i>{{ job.recruiter.companyName }}</h2>
+        <p class="text-secondary-dark mb-2 flex items-center">
+          <i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }} |
+          <i class="fas fa-clipboard-list ml-2 mr-2"></i>{{ job.contractType }} |
+          <i class="fas fa-dollar-sign ml-2 mr-2"></i>{{ job.salary | currency }}
+        </p>
+        <div class="flex items-center space-x-2 mb-4">
+          <span class="text-black-light flex items-center"><i class="fas fa-calendar-alt mr-2"></i><strong>Published:  </strong> {{ job.publicationDate | date }}</span>
+        </div>
+        <div class="flex flex-wrap space-x-2">
+          <span class="bg-secondary-dark text-white px-2 py-1 rounded-full text-sm flex items-center"><i class="fas fa-clipboard-list mr-1"></i>{{ job.contractType }}</span>
+          <span class="bg-secondary-dark text-white px-2 py-1 rounded-full text-sm flex items-center"><i class="fas fa-map-marker-alt mr-1"></i>{{ job.city }}</span>
+          <span class="bg-secondary-dark text-white px-2 py-1 rounded-full text-sm flex items-center"><i class="fas fa-dollar-sign mr-1"></i>{{ job.salary | currency }}</span>
+        </div>
+      </div>
+    </div>
   </div>
-  <ng-template #noJob>
-    <p>Job details not available.</p>
-  </ng-template>
-  
+
+  <div class="job-content">
+    <section class="mb-6">
+      <h3 class="text-lg font-semibold text-black flex items-center"><i class="fas fa-building mr-2"></i>Company</h3>
+      <p class="text-secondary">{{ job.recruiter.companyDescription || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.' }}</p>
+    </section>
+    <section class="mb-6">
+      <h3 class="text-lg font-semibold text-black flex items-center"><i class="fas fa-file-alt mr-2"></i>Job Description</h3>
+      <p class="text-secondary">{{ job.description }}</p>
+    </section>
+    <section class="mb-6">
+      <h3 class="text-lg font-semibold text-black flex items-center"><i class="fas fa-tools mr-2"></i>Skills</h3>
+      <ul class="flex flex-wrap">
+        <li *ngFor="let skill of job.requiredSkills" class="bg-secondary-light text-black-dark px-3 py-1 rounded-full mr-2 mb-2 flex items-center"><i class="fas fa-check mr-1"></i>{{ skill }}</li>
+      </ul>
+    </section>
+    <section class="mb-6">
+      <h3 class="text-lg font-semibold text-black flex items-center"><i class="fas fa-chart-line mr-2"></i>Match Score</h3>
+      <p class="text-xl font-bold text-primary flex items-center"><i class="fas fa-percentage mr-2"></i>{{ job.matchScore }}%</p>
+    </section>
+    <section class="mb-6">
+      <h3 class="text-lg font-semibold text-black flex items-center"><i class="fas fa-info-circle mr-2"></i>Additional Information</h3>
+      <p class="text-secondary flex items-center"><i class="fas fa-briefcase mr-2"></i><strong>Work Environment:</strong> {{ job.workEnvironment || 'Dynamic and collaborative' }}</p>
+      <p class="text-secondary flex items-center"><i class="fas fa-medkit mr-2"></i><strong>Benefits:</strong> {{ job.benefits || 'Health insurance, Retirement plans, Paid time off' }}</p>
+      <p class="text-secondary flex items-center"><i class="fas fa-user-graduate mr-2"></i><strong>Opportunities for Growth:</strong> {{ job.opportunitiesForGrowth || 'Career advancement and skill development' }}</p>
+      <p class="text-secondary flex items-center"><i class="fas fa-users mr-2"></i><strong>Company Culture:</strong> {{ job.companyCulture || 'Inclusive and supportive' }}</p>
+    </section>
+    <button mat-raised-button class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded flex items-center"><i class="fas fa-paper-plane mr-2"></i>Final Apply</button>
+  </div>
+</div>
+<ng-template #noJob>
+  <p class="text-center text-black-light">Job details not available.</p>
+</ng-template>
