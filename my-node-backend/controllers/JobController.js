@@ -151,7 +151,7 @@ exports.getJobs = async (req, res) => {
 
 // Apply to a job
 exports.applyToJob = async (req, res) => {
-    const { candidateId } = req.candidate;
+    const { candidateId } = req.body; // Make sure you're sending candidateId in the request body
     const { jobId } = req.params;
 
     try {

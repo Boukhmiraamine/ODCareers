@@ -32,4 +32,13 @@ export class JobService {
       })
     );
   }
+
+  applyToJob(jobId: string, candidateId: string): Observable<any> {
+    return this.http.post<any>(`${this.jobUrl}/${jobId}/apply`, { candidateId }, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error applying to job:', error);
+        return throwError(() => new Error('Job application failed: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
 }
