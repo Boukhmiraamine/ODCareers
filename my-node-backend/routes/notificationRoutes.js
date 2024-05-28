@@ -8,7 +8,6 @@ const {
     getNotificationsForRecruiter,
     getNotificationsForCandidate
 } = require('../controllers/notificationController');
-//const { authenticate, checkIfRecruiter, checkIfCandidate } = require('../middlewares/authMiddleware');
 const jwt = require('jsonwebtoken');
 
 function authenticate (req, res, next) {
@@ -24,7 +23,8 @@ function authenticate (req, res, next) {
     } catch (error) {
         res.status(401).json({ message: "Authentication failed: Invalid token" });
     }
-};
+}
+
 function checkIfRecruiter(req, res, next) {
     if (req.user.role === 'Recruiter') {
         next();

@@ -8,6 +8,7 @@ import { AuthService } from './auth-service.service';
 })
 export class JobService {
   private jobUrl = 'http://localhost:3000/api/jobs';
+  private notificationUrl = 'http://localhost:3000/api/notifications';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -38,6 +39,33 @@ export class JobService {
       catchError(error => {
         console.error('Error applying to job:', error);
         return throwError(() => new Error('Job application failed: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  getNotifications(): Observable<any> {
+    return this.http.get<any>(this.notificationUrl, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error fetching notifications:', error);
+        return throwError(() => new Error('Failed to fetch notifications: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  getRecruiterNotifications(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.notificationUrl}/recruiter/${userId}`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error fetching recruiter notifications:', error);
+        return throwError(() => new Error('Failed to fetch recruiter notifications: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  markNotificationRead(notificationId: string): Observable<any> {
+    return this.http.put<any>(`${this.notificationUrl}/${notificationId}/read`, {}, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error marking notification as read:', error);
+        return throwError(() => new Error('Failed to mark notification as read: ' + (error.error?.message || error.statusText)));
       })
     );
   }

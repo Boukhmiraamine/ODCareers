@@ -143,15 +143,18 @@ exports.getJobs = async (req, res) => {
         }
 
         const totalJobs = await Job.countDocuments(query);
+        console.log("Total jobs found:", totalJobs); // Log total jobs found
         res.status(200).json({ jobs, totalJobs });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
+
+
 // Apply to a job
 exports.applyToJob = async (req, res) => {
-    const { candidateId } = req.body; // Make sure you're sending candidateId in the request body
+    const { candidateId } = req.body; // Ensure candidateId is in the request body
     const { jobId } = req.params;
 
     try {

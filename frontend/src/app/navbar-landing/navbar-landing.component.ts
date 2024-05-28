@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth-service.service';
+import { JobService } from '../job.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,14 +11,23 @@ import { Router } from '@angular/router';
 export class NavbarLandingComponent implements OnInit {
   isLoggedIn = false;
   dropdownOpen = false;
+  notificationDropdownOpen = false;
   loggedInUserId: string | null = null;
+  notifications: any[] = [];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private jobService: JobService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.checkLoginStatus();
     this.authService.loginStatus$.subscribe(status => {
       this.checkLoginStatus();
+      if (this.isLoggedIn) {
+        this.fetchNotifications();
+      }
     });
   }
 
@@ -29,6 +39,34 @@ export class NavbarLandingComponent implements OnInit {
 
   toggleDropdown(): void {
     this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  toggleNotificationDropdown(): void {
+    this.notificationDropdownOpen = !this.notificationDropdownOpen;
+  }
+
+  fetchNotifications(): void {
+    if (this.loggedInUserId) {
+      this.jobService.getRecruiterNotifications(this.loggedInUserId).subscribe(
+        response => {
+          this.notifications = response;
+        },
+        error => {
+          console.error('Error fetching notifications', error);
+        }
+      );
+    }
+  }
+
+  markAsRead(notificationId: string): void {
+    this.jobService.markNotificationRead(notificationId).subscribe(
+      () => {
+        this.notifications = this.notifications.filter(n => n._id !== notificationId);
+      },
+      error => {
+        console.error('Error marking notification as read', error);
+      }
+    );
   }
 
   logout(): void {
