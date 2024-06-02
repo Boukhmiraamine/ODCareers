@@ -1,0 +1,41 @@
+<div class="container mx-auto p-4">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <div class="flex items-center">
+        <img [src]="profilePicture || 'assets/default-profile-picture.png'" alt="Profile Picture" class="w-32 h-32 rounded-full">
+        <div class="ml-4">
+          <h2 class="text-2xl font-bold">{{ candidate.fullName }}</h2>
+          <p class="text-gray-600">{{ candidate.email }}</p>
+          <p class="text-gray-600">{{ candidate.status }}</p>
+        </div>
+      </div>
+      <div class="mt-6">
+        <h3 class="text-lg font-bold">Personal Information</h3>
+        <p><strong>Username:</strong> {{ candidate.username }}</p>
+        <p><strong>Address:</strong> {{ candidate.address }}</p>
+        <p><strong>Telephone:</strong> {{ candidate.telephone }}</p>
+        <p><strong>Age:</strong> {{ candidate.age }}</p>
+      </div>
+      <div class="mt-6">
+        <h3 class="text-lg font-bold">Education</h3>
+        <ul>
+          <li *ngFor="let education of candidate.educations">{{ education }}</li>
+        </ul>
+      </div>
+      <div class="mt-6">
+        <h3 class="text-lg font-bold">Experience</h3>
+        <ul>
+          <li *ngFor="let experience of candidate.experiences">{{ experience }}</li>
+        </ul>
+      </div>
+      <div class="mt-6">
+        <h3 class="text-lg font-bold">Certifications</h3>
+        <ul>
+          <li *ngFor="let certification of candidate.certifications">{{ certification }}</li>
+        </ul>
+      </div>
+      <div class="mt-6">
+        <button mat-raised-button color="primary" routerLink="/profile/settings">Edit Profile</button>
+      </div>
+    </div>
+  </div>
+  

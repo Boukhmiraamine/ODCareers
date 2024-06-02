@@ -1,33 +1,50 @@
-/*const express = require('express');
+const express = require('express');
 const router = express.Router();
-//const { authenticate } = require('../middlewares/authMiddleware');
-const { addEducation, addExperience, addCertification } = require('../controllers/profileController');
-function authenticate (req, res, next) {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-        return res.status(401).json({ message: "Authentication failed: No token provided" });
-    }
+const jwt = require('jsonwebtoken');
+const {
+  addEducation,
+  updateEducation,
+  deleteEducation,
+  addExperience,
+  updateExperience,
+  deleteExperience,
+  addCertification,
+  updateCertification,
+  deleteCertification,
+  updatePersonalInfo,
+  upload,
+  uploadProfilePicture
+} = require('../controllers/profileController');
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.user;
-        next();
-    } catch (error) {
-        res.status(401).json({ message: "Authentication failed: Invalid token" });
-    }
-};
-router.post('/education', addEducation);
-router.put('/education/:id', updateEducation);
-router.delete('/education/:id', deleteEducation);
+function authenticate(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'Authentication failed: No token provided' });
+  }
 
-router.post('/experience', addExperience);
-router.put('/experience/:id', updateExperience);
-router.delete('/experience/:id', deleteExperience);
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded.user;
+    next();
+  } catch (error) {
+    res.status(401).json({ message: 'Authentication failed: Invalid token' });
+  }
+}
 
-router.post('/certification', addCertification);
-router.put('/certification/:id', updateCertification);
-router.delete('/certification/:id', deleteCertification);
+router.post('/education', authenticate, addEducation);
+router.put('/education/:id', authenticate, updateEducation);
+router.delete('/education/:id', authenticate, deleteEducation);
 
-router.put('/personal-info', updatePersonalInfo);
+router.post('/experience', authenticate, addExperience);
+router.put('/experience/:id', authenticate, updateExperience);
+router.delete('/experience/:id', authenticate, deleteExperience);
 
-module.exports = router;*/
+router.post('/certification', authenticate, addCertification);
+router.put('/certification/:id', authenticate, updateCertification);
+router.delete('/certification/:id', authenticate, deleteCertification);
+
+router.put('/personal-info', authenticate, updatePersonalInfo);
+
+router.post('/upload-profile-picture', authenticate, upload.single('profilePicture'), uploadProfilePicture);
+
+module.exports = router;

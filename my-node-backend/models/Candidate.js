@@ -29,10 +29,12 @@ const candidateSchema = new Schema({
   address: { type: String, required: true },
   telephone: { type: String, required: true },
   age: { type: Number, required: true },
+  profilePicture: { type: String },
   educations: [{ type: Schema.Types.ObjectId, ref: 'Education', required: false }],
   experiences: [{ type: Schema.Types.ObjectId, ref: 'Experience', required: false }],
   certifications: [{ type: Schema.Types.ObjectId, ref: 'Certification', required: false }]
 }, { collection: 'candidates' });
 
 module.exports = mongoose.model('Candidate', candidateSchema);
+
 

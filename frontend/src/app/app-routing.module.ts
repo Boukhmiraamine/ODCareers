@@ -13,6 +13,8 @@ import { JobDetailComponent } from './job-detail/job-detail.component';
 import { authGuard } from './auth.guard';
 import { roleGuard } from './role.guard';
 import { loginGuard } from './login.guard';
+import { ProfilecandidateComponent } from './profilecandidate/profilecandidate.component';
+import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/profilecandidatesettings.component';
 
 const routes: Routes = [
   { path: '', component: HomeLandingComponent },
@@ -24,7 +26,9 @@ const routes: Routes = [
   { path: 'homerecruiter', component: HomeRecruiterComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Recruiter' } },
   { path: 'homecandidate', component: HomecandidateComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Candidate' } },
   { path: 'offresCandidates', component: OffresCandidatesComponent },
-  { path: 'job-detail', component: JobDetailComponent }
+  { path: 'job-detail', component: JobDetailComponent },
+  { path: 'profile', component: ProfilecandidateComponent },
+  { path: 'profile/settings', component: ProfilecandidatesettingsComponent },
 ];
 
 @NgModule({

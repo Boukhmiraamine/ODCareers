@@ -1,6 +1,4 @@
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 
 <header class="fixed inset-x-0 top-0 z-10 w-full bg-transparent">
   <div class="px-4 mx-auto sm:px-6 lg:px-8">
@@ -64,7 +62,8 @@
               <p class="text-sm font-medium leading-5 text-gray-900 truncate">{{ loggedInUserId }}</p>
             </div>
             <div class="py-1">
-              <a routerLink="/profile" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Profile Settings</a>
+              <a routerLink="/profile" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Profile</a>
+              <a routerLink="/profile/settings" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Profile Settings</a>
               <a (click)="logout()" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</a>
             </div>
           </div>

@@ -42,6 +42,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ApplyConfirmationDialogComponent } from './apply-confirmation-dialog/apply-confirmation-dialog.component';
 import { SnackbarComfirmationApplyJobComponent } from './snackbar-comfirmation-apply-job/snackbar-comfirmation-apply-job.component';
 import { JobDetailComponent } from './job-detail/job-detail.component';
+import { ProfilecandidateComponent } from './profilecandidate/profilecandidate.component';
+import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/profilecandidatesettings.component';
 
 
 
@@ -68,7 +70,9 @@ import { JobDetailComponent } from './job-detail/job-detail.component';
     HomecandidateComponent,
     ApplyConfirmationDialogComponent,
     SnackbarComfirmationApplyJobComponent,
-    JobDetailComponent
+    JobDetailComponent,
+    ProfilecandidateComponent,
+    ProfilecandidatesettingsComponent
   ],
   imports: [
     BrowserModule,

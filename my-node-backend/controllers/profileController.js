@@ -2,7 +2,19 @@ const Education = require('../models/Education');
 const Experience = require('../models/Experience');
 const Certification = require('../models/Certification');
 const Candidate = require('../models/Candidate');
+const multer = require('multer');
+const path = require('path');
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
 
 async function addEducation(req, res) {
   try {
@@ -113,6 +125,19 @@ async function updatePersonalInfo(req, res) {
   }
 }
 
+async function uploadProfilePicture(req, res) {
+  try {
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      req.user.id,
+      { profilePicture: req.file.path },
+      { new: true }
+    );
+    res.status(200).json(updatedCandidate);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to upload profile picture', error: error.message });
+  }
+}
+
 module.exports = {
   addEducation,
   updateEducation,
@@ -123,5 +148,7 @@ module.exports = {
   addCertification,
   updateCertification,
   deleteCertification,
-  updatePersonalInfo
+  updatePersonalInfo,
+  upload,
+  uploadProfilePicture
 };

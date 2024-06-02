@@ -1,0 +1,47 @@
+<div class="container mx-auto p-4">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Profile Settings</h2>
+      <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field class="w-full">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" [disabled]="true">
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName">
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Status</mat-label>
+            <input matInput formControlName="status">
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="address">
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Telephone</mat-label>
+            <input matInput formControlName="telephone">
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Age</mat-label>
+            <input matInput formControlName="age">
+          </mat-form-field>
+        </div>
+        <div class="flex items-center mt-4">
+          <button mat-raised-button color="primary" (click)="uploadPictureInput.click()">Change Profile Picture</button>
+          <input type="file" #uploadPictureInput (change)="onFileSelected($event)" class="hidden">
+          <button *ngIf="selectedFile" mat-raised-button color="accent" (click)="uploadProfilePicture()">Upload</button>
+        </div>
+        <img *ngIf="profilePicture" [src]="profilePicture" alt="Profile Picture" class="mt-4 w-32 h-32 rounded-full">
+        <div class="mt-6">
+          <button mat-raised-button color="primary" type="submit">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
