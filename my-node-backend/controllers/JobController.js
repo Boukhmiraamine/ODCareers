@@ -33,26 +33,25 @@ exports.getAllJobs = async (req, res) => {
 
 // Get jobs by recruiter ID
 exports.getJobsByRecruiter = async (req, res) => {
-    console.log("Fetching jobs for recruiter ID:", req.query.recruiterId);
+    const { recruiterId, page = 1, pageSize = 10 } = req.query;
+  
     try {
-        const { recruiterId, page = 1, pageSize = 10 } = req.query;
-        if (!recruiterId) {
-            return res.status(400).json({ message: "Recruiter ID is required" });
-        }
-
-        const query = { isApproved: true, recruiter: recruiterId };
-        const jobs = await Job.find(query)
-                              .populate('recruiter')
-                              .skip((page - 1) * pageSize)
-                              .limit(Number(pageSize));
-        
-        const totalJobs = await Job.countDocuments(query);
-        console.log("Total jobs found:", totalJobs); // Log total jobs found
-        res.status(200).json({ jobs, totalJobs });
+      const query = {
+        recruiter: recruiterId,
+        isApproved: true
+      };
+  
+      const jobs = await Job.find(query)
+                            .skip((page - 1) * pageSize)
+                            .limit(Number(pageSize))
+                            .populate('recruiter');
+  
+      const totalJobs = await Job.countDocuments(query);
+      res.status(200).json({ jobs, totalJobs });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
 
 // Get job by ID

@@ -46,6 +46,10 @@ export class HomeRecruiterComponent implements OnInit {
   recruiterId: string | null = null;
 
   jobOffers: Job[] = [];
+  dropdowns: { sort: boolean; filters: boolean } = {
+    sort: false,
+    filters: false
+  };
 
   constructor(
     public dialog: MatDialog,
@@ -132,5 +136,9 @@ export class HomeRecruiterComponent implements OnInit {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
     this.loadJobOffers();
+  }
+
+  toggleDropdown(type: keyof typeof this.dropdowns): void {
+    this.dropdowns[type] = !this.dropdowns[type];
   }
 }
