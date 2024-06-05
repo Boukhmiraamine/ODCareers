@@ -17,12 +17,27 @@ export class JobService {
     return new HttpHeaders().set('Authorization', token ? token : '');
   }
 
+  getJobsByRecruiter(recruiterId: string, page: number = 1, pageSize: number = 10): Observable<any> {
+    let params: any = { recruiterId, page, pageSize };
+    return this.http.get<any>(`${this.jobUrl}/byRecruiter`, { headers: this.getAuthHeaders(), params: params }).pipe(
+      catchError(error => {
+        console.error('Error fetching jobs by recruiter:', error);
+        return throwError(() => new Error('Failed to fetch jobs: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
   getJobs(recruiterId?: string): Observable<any> {
     let params: any = {};
     if (recruiterId) {
       params.recruiterId = recruiterId;
     }
-    return this.http.get<any>(this.jobUrl, { headers: this.getAuthHeaders(), params: params });
+    return this.http.get<any>(this.jobUrl, { headers: this.getAuthHeaders(), params: params }).pipe(
+      catchError(error => {
+        console.error('Error fetching jobs:', error);
+        return throwError(() => new Error('Failed to fetch jobs: ' + (error.error?.message || error.statusText)));
+      })
+    );
   }
 
   createJob(jobData: any): Observable<any> {
@@ -30,6 +45,25 @@ export class JobService {
       catchError(error => {
         console.error('Error creating job:', error);
         return throwError(() => new Error('Job creation failed: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  updateJob(jobId: string, jobData: any): Observable<any> {
+    return this.http.put<any>(`${this.jobUrl}/${jobId}`, jobData, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error updating job:', error);
+        return throwError(() => new Error('Job update failed: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  
+  deleteJob(jobId: string): Observable<any> {
+    return this.http.delete<any>(`${this.jobUrl}/${jobId}`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error deleting job:', error);
+        return throwError(() => new Error('Job deletion failed: ' + (error.error?.message || error.statusText)));
       })
     );
   }

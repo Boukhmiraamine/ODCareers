@@ -1,21 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import cors package
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const testRoutes = require('./routes/testRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const profileRoutes = require('./routes/profileRoutes');
-const { mongoURI, port } = require('./config/config');
 const recruiterRoutes = require('./routes/recruiterRoutes');
+const { mongoURI, port } = require('./config/config');
+const path = require('path');
 
 const app = express();
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Use cors middleware
 app.use(cors());
-app.use(express.json()); // Use express built-in JSON parser
-app.use(express.urlencoded({ extended: true })); // Use express built-in URL-encoded parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobRoutes);
@@ -23,15 +24,15 @@ app.use('/api/tests', testRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/recruiters', recruiterRoutes);
-//app.use('/api/profile', profileRoutes);
+app.use('/api/profile', profileRoutes);
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('MongoDB connected');
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
-    })
-    .catch(err => {
-        console.error('MongoDB connection error:', err);
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
     });
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+  });

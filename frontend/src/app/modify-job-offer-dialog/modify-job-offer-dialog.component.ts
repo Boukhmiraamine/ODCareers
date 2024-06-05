@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { JobService } from '../job.service';
 
 @Component({
   selector: 'app-modify-job-offer-dialog',
@@ -8,26 +9,28 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ModifyJobOfferDialogComponent {
   selectedJobOffer: any; // Placeholder for the selected job offer details
-  selectedSkills: any = {};
 
   constructor(
     public dialogRef: MatDialogRef<ModifyJobOfferDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private jobService: JobService
   ) {
-    // Receive selected job offer data from parent component
-    this.selectedJobOffer = data.jobOffer;
+    this.selectedJobOffer = data.job;
   }
 
-  submitModifiedJobOffer(modifiedJobOffer: any): void {
-    // Implement logic to submit modified job offer
-    console.log(modifiedJobOffer);
-    // Close the dialog after submission
-    this.dialogRef.close();
+  submitModifiedJobOffer(): void {
+    this.jobService.updateJob(this.selectedJobOffer._id, this.selectedJobOffer).subscribe(
+      response => {
+        console.log('Job updated successfully', response);
+        this.dialogRef.close('updated');
+      },
+      error => {
+        console.error('Error updating job', error);
+      }
+    );
   }
 
   closeDialog(): void {
-    // Close the dialog without submitting changes
     this.dialogRef.close();
   }
-
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const Candidate = require('../models/Candidate');
 const {
   addEducation,
   updateEducation,
@@ -31,6 +32,22 @@ function authenticate(req, res, next) {
   }
 }
 
+// Add this route for fetching a candidate profile by ID
+router.get('/:id', authenticate, async (req, res) => {
+  try {
+    const candidate = await Candidate.findById(req.params.id)
+      .populate('educations')
+      .populate('experiences')
+      .populate('certifications');
+    if (!candidate) {
+      return res.status(404).json({ message: 'Candidate not found' });
+    }
+    res.status(200).json(candidate);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch profile', error: error.message });
+  }
+});
+
 router.post('/education', authenticate, addEducation);
 router.put('/education/:id', authenticate, updateEducation);
 router.delete('/education/:id', authenticate, deleteEducation);
@@ -45,6 +62,7 @@ router.delete('/certification/:id', authenticate, deleteCertification);
 
 router.put('/personal-info', authenticate, updatePersonalInfo);
 
-router.post('/upload-profile-picture', authenticate, upload.single('profilePicture'), uploadProfilePicture);
+router.post('/upload-profile-picture', authenticate, upload, uploadProfilePicture);
+
 
 module.exports = router;

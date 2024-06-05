@@ -30,6 +30,7 @@ function checkIfRecruiter(req, res, next) {
 
 router.post('/', authenticate, checkIfRecruiter, jobController.createJob);
 router.get('/', authenticate, jobController.getAllJobs);
+router.get('/byRecruiter', authenticate, jobController.getJobsByRecruiter); // Added new route
 router.get('/search', authenticate, logSearchActivity, jobController.getJobs);
 router.get('/:id', authenticate, logViewActivity, jobController.getJobById);
 router.put('/:id', authenticate, checkIfRecruiter, jobController.updateJob);

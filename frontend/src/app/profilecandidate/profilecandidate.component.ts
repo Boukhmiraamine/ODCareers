@@ -8,7 +8,7 @@ import { AuthService } from '../auth-service.service';
   styleUrls: ['./profilecandidate.component.css']
 })
 export class ProfilecandidateComponent implements OnInit {
-  candidate: any;
+  candidate: any = {}; // Initialize candidate to an empty object
   profilePicture: string | ArrayBuffer | null = null;
   userId: string | null = null;
 
@@ -20,10 +20,15 @@ export class ProfilecandidateComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.authService.getLoggedInUserId();
     if (this.userId) {
-      this.profileService.getProfile(this.userId).subscribe(profile => {
-        this.candidate = profile;
-        this.profilePicture = profile.profilePicture;
-      });
+      this.profileService.getProfile(this.userId).subscribe(
+        profile => {
+          this.candidate = profile;
+          this.profilePicture = profile.profilePicture;
+        },
+        error => {
+          console.error('Failed to fetch profile:', error);
+        }
+      );
     }
   }
 }

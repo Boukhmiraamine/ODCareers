@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>{{data._id ? 'Edit' : 'Add'}} Experience</h1>
+<div mat-dialog-content>
+  <form [formGroup]="experienceForm">
+    <mat-form-field class="w-full">
+      <mat-label>Company</mat-label>
+      <input matInput formControlName="company">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Position</mat-label>
+      <input matInput formControlName="position">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Start Date</mat-label>
+      <input matInput formControlName="startDate" type="date">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>End Date</mat-label>
+      <input matInput formControlName="endDate" type="date">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="saveExperience()">Save</button>
+</div>

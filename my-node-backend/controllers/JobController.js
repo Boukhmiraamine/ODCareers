@@ -31,6 +31,30 @@ exports.getAllJobs = async (req, res) => {
     }
 };
 
+// Get jobs by recruiter ID
+exports.getJobsByRecruiter = async (req, res) => {
+    console.log("Fetching jobs for recruiter ID:", req.query.recruiterId);
+    try {
+        const { recruiterId, page = 1, pageSize = 10 } = req.query;
+        if (!recruiterId) {
+            return res.status(400).json({ message: "Recruiter ID is required" });
+        }
+
+        const query = { isApproved: true, recruiter: recruiterId };
+        const jobs = await Job.find(query)
+                              .populate('recruiter')
+                              .skip((page - 1) * pageSize)
+                              .limit(Number(pageSize));
+        
+        const totalJobs = await Job.countDocuments(query);
+        console.log("Total jobs found:", totalJobs); // Log total jobs found
+        res.status(200).json({ jobs, totalJobs });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 // Get job by ID
 exports.getJobById = async (req, res) => {
     console.log("Fetching job by ID:", req.params.id);
@@ -49,31 +73,46 @@ exports.getJobById = async (req, res) => {
     }
 };
 
+
 // Update a job
 exports.updateJob = async (req, res) => {
     try {
-        const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updatedJob) {
+        const job = await Job.findById(req.params.id);
+        if (!job) {
             return res.status(404).json({ message: 'Job not found' });
         }
+        if (job.recruiter.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+        const updatedJob = await Job.findByIdAndUpdate(
+            req.params.id,
+            { ...req.body, isApproved: job.isApproved },
+            { new: true }
+        );
         res.status(200).json(updatedJob);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
+
 // Delete a job
 exports.deleteJob = async (req, res) => {
     try {
-        const result = await Job.findByIdAndDelete(req.params.id);
-        if (!result) {
+        const job = await Job.findById(req.params.id);
+        if (!job) {
             return res.status(404).json({ message: 'Job not found' });
         }
+        if (job.recruiter.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+        await Job.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: 'Job deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Match skills for a job and candidate
 exports.matchSkills = async (req, res) => {

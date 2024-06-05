@@ -39,8 +39,8 @@ interface Job {
   styleUrls: ['./home-recruiter.component.css']
 })
 export class HomeRecruiterComponent implements OnInit {
-  totalJobs = 0; // Total number of jobs, will be set from the backend response
-  pageSize = 10; // Default page size
+  totalJobs = 0;
+  pageSize = 10;
   pageSizeOptions = [5, 10, 20];
   currentPage = 0;
   recruiterId: string | null = null;
@@ -61,7 +61,7 @@ export class HomeRecruiterComponent implements OnInit {
   loadJobOffers(): void {
     this.recruiterId = this.authService.getLoggedInUserId();
     if (this.recruiterId) {
-      this.jobService.getJobs(this.recruiterId, /*this.currentPage + 1, this.pageSize*/).subscribe(
+      this.jobService.getJobsByRecruiter(this.recruiterId).subscribe(
         response => {
           if (response && response.jobs) {
             console.log("Jobs loaded:", response.jobs);
@@ -96,18 +96,18 @@ export class HomeRecruiterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'confirm') {
-        this.loadJobOffers(); // Refresh the list
+        this.loadJobOffers();
         this.snackBar.open('Job offer added successfully', 'Close', { duration: 3000 });
       }
     });
   }
 
-  openModifyDialog(job: Job): void {
+  openModifyDialog(job: any): void {
     const dialogRef = this.dialog.open(ModifyJobOfferDialogComponent, {
       width: '600px',
       data: { job }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'updated') {
         this.loadJobOffers(); // Refresh the list
@@ -117,15 +117,15 @@ export class HomeRecruiterComponent implements OnInit {
   }
 
   deleteJobOffer(jobId: string): void {
-    /*this.jobService.deleteJob(jobId).subscribe({
+    this.jobService.deleteJob(jobId).subscribe({
       next: () => {
-        this.loadJobOffers(); // Refresh the list
+        this.loadJobOffers();
         this.snackBar.open('Job offer deleted successfully', 'Close', { duration: 3000 });
       },
       error: () => {
         this.snackBar.open('Failed to delete job offer', 'Close', { duration: 3000 });
       }
-    });*/
+    });
   }
 
   onPageChange(event: any): void {

@@ -1,47 +1,212 @@
-<div class="container mx-auto p-4">
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-      <h2 class="text-2xl font-bold mb-4">Profile Settings</h2>
-      <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <mat-form-field class="w-full">
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username">
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" [disabled]="true">
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Full Name</mat-label>
-            <input matInput formControlName="fullName">
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Status</mat-label>
-            <input matInput formControlName="status">
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Address</mat-label>
-            <input matInput formControlName="address">
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Telephone</mat-label>
-            <input matInput formControlName="telephone">
-          </mat-form-field>
-          <mat-form-field class="w-full">
-            <mat-label>Age</mat-label>
-            <input matInput formControlName="age">
-          </mat-form-field>
+<main class="bg-gray-100 min-h-screen pt-16 pb-12 flex justify-center items-center">
+  <div class="p-4 md:p-4 w-full max-w-4xl">
+    <div class="w-full px-6 pt-5 pb-8 mt-8 sm:rounded-lg bg-white shadow-md">
+      <div class="flex justify-center items-center mb-8">
+        <h2 class="text-2xl font-bold sm:text-xl text-orange-600">Profile Settings</h2>
+      </div>
+      
+      <div class="grid max-w-2xl mx-auto mt-8">
+        <div class="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0 sm:space-x-4">
+          <div class="relative group">
+            <img
+            class="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-orange-300 transition-transform duration-300 ease-in-out transform group-hover:scale-105"
+            [src]="profilePicture ? profilePicture : 'https://via.placeholder.com/150'"
+            alt="Profile Picture"
+          />
+            <button
+              type="button"
+              class="absolute bottom-0 right-0 py-1 px-1 bg-orange-600 text-white rounded-full hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-200"
+              (click)="uploadPictureInput.click()"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <input type="file" #uploadPictureInput (change)="onFileSelected($event)" class="hidden" />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <button
+              *ngIf="selectedFile"
+              class="py-2.5 px-5 text-base font-medium text-white bg-orange-600 rounded-lg border border-orange-200 hover:bg-orange-700 focus:outline-none focus:z-10 focus:ring-4 focus:ring-orange-200"
+              (click)="uploadProfilePicture()"
+            >
+              Upload
+            </button>
+          </div>
         </div>
-        <div class="flex items-center mt-4">
-          <button mat-raised-button color="primary" (click)="uploadPictureInput.click()">Change Profile Picture</button>
-          <input type="file" #uploadPictureInput (change)="onFileSelected($event)" class="hidden">
-          <button *ngIf="selectedFile" mat-raised-button color="accent" (click)="uploadProfilePicture()">Upload</button>
-        </div>
-        <img *ngIf="profilePicture" [src]="profilePicture" alt="Profile Picture" class="mt-4 w-32 h-32 rounded-full">
+
+        <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="mt-8 sm:mt-14 text-black">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="w-full">
+              <label for="username" class="block mb-2 text-sm font-medium text-black">Username</label>
+              <input
+                type="text"
+                id="username"
+                formControlName="username"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Username"
+              />
+            </div>
+            <div class="w-full">
+              <label for="email" class="block mb-2 text-sm font-medium text-black">Email</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                [disabled]="true"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Email"
+              />
+            </div>
+            <div class="w-full">
+              <label for="fullName" class="block mb-2 text-sm font-medium text-black">Full Name</label>
+              <input
+                type="text"
+                id="fullName"
+                formControlName="fullName"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Full Name"
+              />
+            </div>
+            <div class="w-full">
+              <label for="status" class="block mb-2 text-sm font-medium text-black">Status</label>
+              <input
+                type="text"
+                id="status"
+                formControlName="status"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Status"
+              />
+            </div>
+            <div class="w-full">
+              <label for="address" class="block mb-2 text-sm font-medium text-black">Address</label>
+              <input
+                type="text"
+                id="address"
+                formControlName="address"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Address"
+              />
+            </div>
+            <div class="w-full">
+              <label for="telephone" class="block mb-2 text-sm font-medium text-black">Telephone</label>
+              <input
+                type="text"
+                id="telephone"
+                formControlName="telephone"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Telephone"
+              />
+            </div>
+            <div class="w-full">
+              <label for="age" class="block mb-2 text-sm font-medium text-black">Age</label>
+              <input
+                type="text"
+                id="age"
+                formControlName="age"
+                class="bg-orange-50 border border-orange-300 text-black text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                placeholder="Age"
+              />
+            </div>
+          </div>
+          <div class="flex justify-end mt-6">
+            <button
+              type="submit"
+              class="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            >
+              Save Settings
+            </button>
+          </div>
+        </form>
+
         <div class="mt-6">
-          <button mat-raised-button color="primary" type="submit">Save Settings</button>
+          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-md">
+            <h3 class="text-lg font-bold text-black">Education</h3>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openEducationDialog()"
+              class="bg-transparent text-black rounded-full"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="mt-1">
+            <div *ngFor="let education of candidate?.educations" class="bg-white p-4 rounded-md shadow-md mb-4">
+              <h4 class="font-bold">{{ education.school }}</h4>
+              <p>{{ education.degree }} in {{ education.fieldOfStudy }}</p>
+              <p>{{ education.startDate | date }} - {{ education.endDate | date }}</p>
+              <div class="flex justify-end space-x-2">
+                <button mat-icon-button (click)="openEducationDialog(education)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteEducation(education._id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
+
+        <!-- Experience Section -->
+        <div class="mt-6">
+          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-md">
+            <h3 class="text-lg font-bold text-black">Experience</h3>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openExperienceDialog()"
+              class="bg-transparent text-black rounded-full"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="mt-1">
+            <div *ngFor="let experience of candidate?.experiences" class="bg-white p-4 rounded-md shadow-md mb-4">
+              <h4 class="font-bold">{{ experience.company }}</h4>
+              <p>{{ experience.position }}</p>
+              <p>{{ experience.startDate | date }} - {{ experience.endDate | date }}</p>
+              <div class="flex justify-end space-x-2">
+                <button mat-icon-button (click)="openExperienceDialog(experience)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteExperience(experience._id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certification Section -->
+        <div class="mt-6">
+          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-md shadow-md">
+            <h3 class="text-lg font-bold text-black">Certifications</h3>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="openCertificationDialog()"
+              class="bg-transparent text-black rounded-full"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="mt-1">
+            <div *ngFor="let certification of candidate?.certifications" class="bg-white p-4 rounded-md shadow-md mb-4">
+              <h4 class="font-bold">{{ certification.name }}</h4>
+              <p>Issued by {{ certification.issuer }}</p>
+              <p>{{ certification.dateObtained | date }}</p>
+              <div class="flex justify-end space-x-2">
+                <button mat-icon-button (click)="openCertificationDialog(certification)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteCertification(certification._id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
     </div>
   </div>
-  
+</main>

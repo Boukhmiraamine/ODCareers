@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{data._id ? 'Edit' : 'Add'}} Certification</h1>
+<div mat-dialog-content>
+  <form [formGroup]="certificationForm">
+    <mat-form-field class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Issuer</mat-label>
+      <input matInput formControlName="issuer">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Date Obtained</mat-label>
+      <input matInput formControlName="dateObtained" type="date">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="saveCertification()">Save</button>
+</div>

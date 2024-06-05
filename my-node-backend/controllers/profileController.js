@@ -5,16 +5,24 @@ const Candidate = require('../models/Candidate');
 const multer = require('multer');
 const path = require('path');
 
+const fs = require('fs');
+
+// Ensure the uploads directory exists
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage }).single('profilePicture');
 
 async function addEducation(req, res) {
   try {
@@ -129,7 +137,7 @@ async function uploadProfilePicture(req, res) {
   try {
     const updatedCandidate = await Candidate.findByIdAndUpdate(
       req.user.id,
-      { profilePicture: req.file.path },
+      { profilePicture: `/uploads/${req.file.filename}` },  // ensure the path is correct
       { new: true }
     );
     res.status(200).json(updatedCandidate);

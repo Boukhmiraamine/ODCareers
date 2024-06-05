@@ -44,6 +44,10 @@ import { SnackbarComfirmationApplyJobComponent } from './snackbar-comfirmation-a
 import { JobDetailComponent } from './job-detail/job-detail.component';
 import { ProfilecandidateComponent } from './profilecandidate/profilecandidate.component';
 import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/profilecandidatesettings.component';
+import { EducationDialogComponent } from './educationdialog/educationdialog.component';
+import { ExperienceDialogComponent } from './experience-dialog/experience-dialog.component';
+import { CertificationDialogComponent } from './certification-dialog/certification-dialog.component';
+import { MatTableModule } from '@angular/material/table';
 
 
 
@@ -72,7 +76,10 @@ import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/pr
     SnackbarComfirmationApplyJobComponent,
     JobDetailComponent,
     ProfilecandidateComponent,
-    ProfilecandidatesettingsComponent
+    ProfilecandidatesettingsComponent,
+    EducationDialogComponent,
+    ExperienceDialogComponent,
+    CertificationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +113,12 @@ import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/pr
     MatCheckboxModule,
     MatButtonModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatDialogModule,
   ],
   exports: [
     MatButtonModule,
