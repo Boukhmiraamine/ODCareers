@@ -39,5 +39,7 @@ router.get('/match/:jobId/:candidateId', authenticate, jobController.matchSkills
 router.post('/:jobId/apply', authenticate, jobController.applyToJob);
 router.get('/:jobId/applications', authenticate, checkIfRecruiter, jobController.getApplicationsByJob);
 router.put('/applications/:applicationId/status', authenticate, checkIfRecruiter, jobController.updateApplicationStatus);
+router.put('/:jobId/applications/:candidateId/status', authenticate, checkIfRecruiter, jobController.updateApplicationStatus);
+
 
 module.exports = router;

@@ -34,25 +34,24 @@ exports.getAllJobs = async (req, res) => {
 // Get jobs by recruiter ID
 exports.getJobsByRecruiter = async (req, res) => {
     const { recruiterId, page = 1, pageSize = 10 } = req.query;
-  
-    try {
-      const query = {
-        recruiter: recruiterId,
-        isApproved: true
-      };
-  
-      const jobs = await Job.find(query)
-                            .skip((page - 1) * pageSize)
-                            .limit(Number(pageSize))
-                            .populate('recruiter');
-  
-      const totalJobs = await Job.countDocuments(query);
-      res.status(200).json({ jobs, totalJobs });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  };
 
+    try {
+        const query = {
+            recruiter: recruiterId,
+            isApproved: true
+        };
+
+        const jobs = await Job.find(query)
+                              .skip((page - 1) * pageSize)
+                              .limit(Number(pageSize))
+                              .populate('recruiter');
+
+        const totalJobs = await Job.countDocuments(query);
+        res.status(200).json({ jobs, totalJobs });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 // Get job by ID
 exports.getJobById = async (req, res) => {
@@ -71,7 +70,6 @@ exports.getJobById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 // Update a job
 exports.updateJob = async (req, res) => {
@@ -94,7 +92,6 @@ exports.updateJob = async (req, res) => {
     }
 };
 
-
 // Delete a job
 exports.deleteJob = async (req, res) => {
     try {
@@ -111,7 +108,6 @@ exports.deleteJob = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 // Match skills for a job and candidate
 exports.matchSkills = async (req, res) => {
@@ -188,8 +184,6 @@ exports.getJobs = async (req, res) => {
     }
 };
 
-
-
 // Apply to a job
 exports.applyToJob = async (req, res) => {
     const { candidateId } = req.body; // Ensure candidateId is in the request body
@@ -252,11 +246,11 @@ exports.getApplicationsByJob = async (req, res) => {
 
 // Update application status
 exports.updateApplicationStatus = async (req, res) => {
-    const { applicationId } = req.params;
+    const { jobId, candidateId } = req.params;
     const { status } = req.body;
 
     try {
-        const application = await Application.findById(applicationId).populate({
+        const application = await Application.findOne({ job: jobId, candidate: candidateId }).populate({
             path: 'job',
             populate: {
                 path: 'recruiter',
@@ -281,7 +275,7 @@ exports.updateApplicationStatus = async (req, res) => {
             application.candidate,
             'Candidate',
             notificationMessage,
-            `/applications/${applicationId}`
+            `/applications/${application._id}`
         );
 
         res.status(200).json({ message: "Application status updated successfully", application });
@@ -290,3 +284,26 @@ exports.updateApplicationStatus = async (req, res) => {
         res.status(500).json({ message: "Failed to update application status", error: error.message });
     }
 };
+
+
+
+// Get applications by job ID
+exports.getApplicationsByJob = async (req, res) => {
+    const { jobId } = req.params;
+  
+    try {
+      const applications = await Application.find({ job: jobId }).populate({
+        path: 'candidate',
+        select: 'username fullName email'
+      });
+  
+      if (!applications.length) {
+        return res.status(404).json({ message: 'No applications found for this job.' });
+      }
+  
+      res.status(200).json({ applications });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch applications", error: error.message });
+    }
+  };
+  

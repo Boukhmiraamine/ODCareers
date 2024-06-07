@@ -138,7 +138,7 @@ export class HomeRecruiterComponent implements OnInit {
     this.loadJobOffers();
   }
 
-  toggleDropdown(type: keyof typeof this.dropdowns): void {
+  toggleDropdown(type: 'sort' | 'filters'): void {
     this.dropdowns[type] = !this.dropdowns[type];
   }
 }

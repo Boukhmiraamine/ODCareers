@@ -1,33 +1,29 @@
 <h2 mat-dialog-title>{{ data.job.title }}</h2>
 <mat-dialog-content>
   <p><strong>Location:</strong> {{ data.job.city }}</p>
+  <p><strong>Company:</strong> {{ data.job.companyName }}</p>
   <p>{{ data.job.companyDescription }}</p>
-  
+
   <p><strong>Responsibilities:</strong></p>
   <ul>
-    <li>
-      {{ data.job.responsibilities}}
-    </li>
-  </ul>
-  
-  <p><strong>Requirements:</strong></p>
-  <ul>
-    <li>
-      {{ data.job.requirements }}
+    <li *ngFor="let responsibility of data.job.responsibilities">
+      {{ responsibility }}
     </li>
   </ul>
 
-  <p><strong>Candidates :</strong></p>
+  <p><strong>Requirements:</strong></p>
   <ul>
-    <li>
-      {{ data.job.candidateCount }}
+    <li *ngFor="let requirement of data.job.requirements">
+      {{ requirement }}
     </li>
   </ul>
-  
+
+  <p><strong>Candidates:</strong> {{ applicationsCount }}</p>
+
   <p>This is a fantastic opportunity to engage in a positive and creative work environment that offers excellent benefits and flexible schedules.</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close routerLink="/offresCandidates">
+  <button mat-button mat-dialog-close [routerLink]="['/offresCandidates', data.job.id]">
     View {{ data.job.candidateCount }} Candidates
   </button>
   <button mat-button mat-dialog-close>Close</button>

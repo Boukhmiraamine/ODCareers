@@ -58,7 +58,6 @@ export class JobService {
     );
   }
 
-  
   deleteJob(jobId: string): Observable<any> {
     return this.http.delete<any>(`${this.jobUrl}/${jobId}`, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
@@ -73,6 +72,24 @@ export class JobService {
       catchError(error => {
         console.error('Error applying to job:', error);
         return throwError(() => new Error('Job application failed: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  updateApplicationStatus(jobId: string, candidateId: string, status: string): Observable<any> {
+    return this.http.put<any>(`${this.jobUrl}/${jobId}/applications/${candidateId}/status`, { status }, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error updating application status:', error);
+        return throwError(() => new Error('Failed to update application status: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  getApplicationsByJob(jobId: string): Observable<any> {
+    return this.http.get<any>(`${this.jobUrl}/${jobId}/applications`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error fetching applications:', error);
+        return throwError(() => new Error('Failed to fetch applications: ' + (error.error?.message || error.statusText)));
       })
     );
   }

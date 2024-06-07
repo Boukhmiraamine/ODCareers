@@ -25,7 +25,7 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'homerecruiter', component: HomeRecruiterComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Recruiter' } },
   { path: 'homecandidate', component: HomecandidateComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Candidate' } },
-  { path: 'offresCandidates', component: OffresCandidatesComponent },
+  { path: 'offresCandidates/:id', component: OffresCandidatesComponent },
   { path: 'job-detail', component: JobDetailComponent },
   { path: 'profile', component: ProfilecandidateComponent },
   { path: 'profile/settings', component: ProfilecandidatesettingsComponent },

@@ -1,173 +1,183 @@
 <div class="bg-white">
-  <div>
-    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8">
-      <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-900">Job Listings</h1>
-        <div class="flex items-center">
-          <!-- Search Bar -->
-          <div class="relative">
-            <input type="text" class="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Search jobs">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <i class="fas fa-search text-gray-400"></i>
-            </div>
+  <div class="absolute inset-0 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
+    <div class="relative w-full h-64 bg-gradient-to-tr from-[#FF7900] to-[#FF7900] opacity-30" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%);"></div>
+  </div>
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24">
+    <div class="flex items-center justify-center pb-6">
+      <div class="relative w-full max-w-4xl">
+        <!-- Search Bar -->
+        <div class="relative flex items-center bg-white shadow-md rounded-lg overflow-hidden">
+          <div class="relative flex items-center w-full">
+            <i class="fas fa-search absolute left-4 text-gray-400"></i>
+            <input type="text" class="block w-full pl-12 pr-4 py-4 border-none focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Intitulé de poste, mots-clés ou entreprise">
           </div>
-          <!-- Sort Button -->
-          <div class="relative inline-block text-left ml-6">
-            <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" (click)="toggleSortMenu()" aria-haspopup="true">
-              Sort
-              <i class="fas fa-sort -mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"></i>
-            </button>
-            <div *ngIf="sortMenuOpen" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5">
-              <div class="py-1">
-                <a href="#" class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('popularity')">Most Popular</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('rating')">Best Rating</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('newest')">Newest</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryLowHigh')">Salary: Low to High</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryHighLow')">Salary: High to Low</a>
-              </div>
-            </div>
+          <div class="relative flex items-center w-full border-l border-gray-200">
+            <i class="fas fa-map-marker-alt absolute left-4 text-gray-400"></i>
+            <input type="text" class="block w-full pl-12 pr-4 py-4 border-none focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Casablanca">
           </div>
-          <!-- Grid View Button -->
-          <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7" (click)="toggleGridView()">
-            <span class="sr-only">View grid</span>
-            <i class="fas fa-th h-5 w-5"></i>
-          </button>
-          <!-- Mobile Filters Button -->
-          <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" (click)="toggleMobileFilters()">
-            <span class="sr-only">Filters</span>
-            <i class="fas fa-filter h-5 w-5"></i>
+          <button class="bg-orange-500 text-white font-bold py-4 px-6 hover:bg-orange-600">
+            <mat-icon>search</mat-icon>
           </button>
         </div>
       </div>
+    </div>
 
-      <section aria-labelledby="products-heading" class="pb-24 pt-6">
-        <h2 id="products-heading" class="sr-only">Products</h2>
-
-        <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-          <!-- Filters -->
-          <form class="hidden lg:block bg-gray-100 p-4 rounded-lg shadow-md">
-            <div class="border-b border-gray-200 py-6">
-              <h3 class="-my-3 flow-root">
-                <button type="button" class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500" (click)="toggleColorFilters()" [attr.aria-expanded]="colorFiltersOpen">
-                  <span class="font-medium text-gray-900">Location</span>
-                  <span class="ml-6 flex items-center">
-                    <i class="fas" [ngClass]="colorFiltersOpen ? 'fa-minus' : 'fa-plus' " class="h-5 w-5"></i>
-                  </span>
-                </button>
-              </h3>
-              <div class="pt-6" *ngIf="colorFiltersOpen">
-                <div class="space-y-4">
-                  <div class="flex items-center">
-                    <input id="filter-color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-color-0" class="ml-3 text-sm text-gray-600">State</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-color-1" class="ml-3 text-sm text-gray-600">Country</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-color-2" name="color[]" value="blue" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-color-2" class="ml-3 text-sm text-gray-600">City</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-color-3" name="color[]" value="brown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-color-3" class="ml-3 text-sm text-gray-600">Remote</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="border-b border-gray-200 py-6">
-              <h3 class="-my-3 flow-root">
-                <button type="button" class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500" (click)="toggleCategoryFilters()" [attr.aria-expanded]="categoryFiltersOpen">
-                  <span class="font-medium text-gray-900">Type</span>
-                  <span class="ml-6 flex items-center">
-                    <i class="fas" [ngClass]="categoryFiltersOpen ? 'fa-minus' : 'fa-plus' " class="h-5 w-5"></i>
-                  </span>
-                </button>
-              </h3>
-              <div class="pt-6" *ngIf="categoryFiltersOpen">
-                <div class="space-y-4">
-                  <div class="flex items-center">
-                    <input id="filter-category-0" name="category[]" value="new-arrivals" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-category-0" class="ml-3 text-sm text-gray-600">Contract</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-category-1" name="category[]" value="sale" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-category-1" class="ml-3 text-sm text-gray-600">Full-Time</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-category-2" name="category[]" value="travel" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-category-2" class="ml-3 text-sm text-gray-600">Part-Time</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-category-3" name="category[]" value="organization" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-category-3" class="ml-3 text-sm text-gray-600">Freelance</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Apply Filters Button -->
-            <div class="pt-6">
-              <button type="button" class="w-full bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-primary-dark">Apply Filters</button>
-            </div>
-          </form>
-
-          <!-- Job Cards -->
-          <div class="lg:col-span-3">
-            <div class="flex flex-col items-center justify-center my-4">
-              <div *ngIf="loading" class="loader-overlay">
-                <mat-spinner diameter="50"></mat-spinner>
-              </div>
-              <ng-container *ngFor="let job of pagedJobs">
-                <mat-card class="transition-all duration-1000 ease-in-out mb-2 bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden"
-                  [ngClass]="{'w-5/6': !job.expanded, 'w-11/12': job.expanded}">
-                  <mat-card-content>
-                    <div class="flex justify-between">
-                      <div>
-                        <div class="text-lg font-bold flex items-center"><i class="fas fa-briefcase mr-2"></i>{{ job.title }}</div>
-                        <div class="text-sm flex items-center"><i class="fas fa-clipboard-list mr-2"></i>{{ job.contractType }}</div>
-                        <div class="text-sm mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }}</div>
-                      </div>
-                      <button mat-icon-button (click)="toggleExpand(job)">
-                        <mat-icon>{{ job.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
-                      </button>
-                    </div>
-                    <div *ngIf="job.expanded" class="expanded-content">
-                      <div class="text-sm mb-2">{{ job.description }}</div>
-                      <div class="flex flex-wrap gap-2 mt-2">
-                        <span class="bg-blue-200 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
-                          *ngFor="let skill of job.requiredSkills">{{ skill }}</span>
-                      </div>
-                    </div>
-                    <div [@expandCollapse]="job.showMatchingSkills ? 'expanded' : 'collapsed'" class="expanded-content mt-4 p-4 bg-gray-200 rounded-lg">
-                      <div class="flex justify-between">
-                        <div>
-                          <h3 class="text-lg font-bold flex items-center"><i class="fas fa-tools mr-2"></i>Matched skills</h3>
-                          <div class="flex flex-wrap gap-2">
-                            <span class="bg-blue-200 text-orange-600 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
-                              *ngFor="let skill of job.requiredSkills">{{ skill }}</span>
-                          </div>
-                        </div>
-                        <div class="score">
-                          <h3 class="text-lg font-bold flex items-center"><i class="fas fa-chart-line mr-2"></i>Match Score</h3>
-                          <div class="text-xl font-bold text-orange-600">{{ job.matchScore }}%</div>
-                        </div>
-                      </div>
-                    </div>
-                  </mat-card-content>
-                  <mat-card-actions class="justify-end gap-3">
-                    <button mat-raised-button color="accent" *ngIf="!loading" (click)="showMatchingSkills(job)">Matching Skills</button>
-                    <button mat-raised-button color="primary" (click)="applyForJob(job)">Apply</button>
-                  </mat-card-actions>
-                </mat-card>
-              </ng-container>
-              <mat-paginator [length]="jobs.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]" (page)="onPageChange($event)">
-              </mat-paginator>
+    <div class="flex items-baseline justify-between border-b border-gray-200 pb-6">
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900">Job Listings</h1>
+      <div class="flex items-center">
+        <!-- Sort Button -->
+        <div class="relative inline-block text-left ml-6">
+          <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" (click)="toggleSortMenu()" aria-haspopup="true">
+            Sort
+            <i class="fas fa-sort -mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"></i>
+          </button>
+          <div *ngIf="sortMenuOpen" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5">
+            <div class="py-1">
+              <a href="#" class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('popularity')">Most Popular</a>
+              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('rating')">Best Rating</a>
+              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('newest')">Newest</a>
+              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryLowHigh')">Salary: Low to High</a>
+              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryHighLow')">Salary: High to Low</a>
             </div>
           </div>
         </div>
-      </section>
-    </main>
+        <!-- Grid View Button -->
+        <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7" (click)="toggleGridView()">
+          <span class="sr-only">View grid</span>
+          <i class="fas fa-th h-5 w-5"></i>
+        </button>
+        <!-- Mobile Filters Button -->
+        <button type="button" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden" (click)="toggleMobileFilters()">
+          <span class="sr-only">Filters</span>
+          <i class="fas fa-filter h-5 w-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <section aria-labelledby="products-heading" class="pb-24 pt-6">
+      <h2 id="products-heading" class="sr-only">Products</h2>
+
+      <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+        <!-- Filters -->
+        <form class="hidden lg:block bg-gray-100 p-4 rounded-lg shadow-md">
+          <div class="border-b border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+              <button type="button" class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500" (click)="toggleColorFilters()" [attr.aria-expanded]="colorFiltersOpen">
+                <span class="font-medium text-gray-900">Location</span>
+                <span class="ml-6 flex items-center">
+                  <i class="fas" [ngClass]="colorFiltersOpen ? 'fa-minus' : 'fa-plus' " class="h-5 w-5"></i>
+                </span>
+              </button>
+            </h3>
+            <div class="pt-6" *ngIf="colorFiltersOpen">
+              <div class="space-y-4">
+                <div class="flex items-center">
+                  <input id="filter-color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-color-0" class="ml-3 text-sm text-gray-600">State</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="filter-color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-color-1" class="ml-3 text-sm text-gray-600">Country</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="filter-color-2" name="color[]" value="blue" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-color-2" class="ml-3 text-sm text-gray-600">City</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="filter-color-3" name="color[]" value="brown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-color-3" class="ml-3 text-sm text-gray-600">Remote</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+              <button type="button" class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500" (click)="toggleCategoryFilters()" [attr.aria-expanded]="categoryFiltersOpen">
+                <span class="font-medium text-gray-900">Type</span>
+                <span class="ml-6 flex items-center">
+                  <i class="fas" [ngClass]="categoryFiltersOpen ? 'fa-minus' : 'fa-plus' " class="h-5 w-5"></i>
+                </span>
+              </button>
+            </h3>
+            <div class="pt-6" *ngIf="categoryFiltersOpen">
+              <div class="space-y-4">
+                <div class="flex items-center">
+                  <input id="filter-category-0" name="category[]" value="new-arrivals" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-category-0" class="ml-3 text-sm text-gray-600">Contract</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="filter-category-1" name="category[]" value="sale" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-category-1" class="ml-3 text-sm text-gray-600">Full-Time</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="filter-category-2" name="category[]" value="travel" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-category-2" class="ml-3 text-sm text-gray-600">Part-Time</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="filter-category-3" name="category[]" value="organization" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="filter-category-3" class="ml-3 text-sm text-gray-600">Freelance</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Apply Filters Button -->
+          <div class="pt-6">
+            <button type="button" class="w-full bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-primary-dark">Apply Filters</button>
+          </div>
+        </form>
+
+        <!-- Job Cards -->
+        <div class="lg:col-span-3">
+          <div class="flex flex-col items-center justify-center my-4">
+            <div *ngIf="loading" class="loader-overlay">
+              <mat-spinner diameter="50"></mat-spinner>
+            </div>
+            <ng-container *ngFor="let job of pagedJobs">
+              <mat-card class="transition-all duration-1000 ease-in-out mb-2 bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden" [ngClass]="{'w-5/6': !job.expanded, 'w-11/12': job.expanded}">
+                <mat-card-content>
+                  <div class="flex justify-between">
+                    <div>
+                      <div class="text-lg font-bold flex items-center"><i class="fas fa-briefcase mr-2"></i>{{ job.title }}</div>
+                      <div class="text-sm flex items-center"><i class="fas fa-clipboard-list mr-2"></i>{{ job.contractType }}</div>
+                      <div class="text-sm mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }}</div>
+                    </div>
+                    <button mat-icon-button (click)="toggleExpand(job)">
+                      <mat-icon>{{ job.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    </button>
+                  </div>
+                  <div *ngIf="job.expanded" class="expanded-content">
+                    <div class="text-sm mb-2">{{ job.description }}</div>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      <span class="bg-blue-200 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800" *ngFor="let skill of job.requiredSkills">{{ skill }}</span>
+                    </div>
+                  </div>
+                  <div [@expandCollapse]="job.showMatchingSkills ? 'expanded' : 'collapsed'" class="expanded-content mt-4 p-4 bg-gray-200 rounded-lg">
+                    <div class="flex justify-between">
+                      <div>
+                        <h3 class="text-lg font-bold flex items-center"><i class="fas fa-tools mr-2"></i>Matched skills</h3>
+                        <div class="flex flex-wrap gap-2">
+                          <span class="bg-blue-200 text-orange-600 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800" *ngFor="let skill of job.requiredSkills">{{ skill }}</span>
+                        </div>
+                      </div>
+                      <div class="score">
+                        <h3 class="text-lg font-bold flex items-center"><i class="fas fa-chart-line mr-2"></i>Match Score</h3>
+                        <div class="text-xl font-bold text-orange-600">100 %</div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+                <mat-card-actions class="justify-end gap-3">
+                  <button mat-raised-button color="orange" *ngIf="!loading" (click)="showMatchingSkills(job)">Matching Skills</button>
+                  <button mat-raised-button color="primary" (click)="applyForJob(job)">Apply</button>
+                </mat-card-actions>
+              </mat-card>
+            </ng-container>
+            <mat-paginator [length]="jobs.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]" (page)="onPageChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </div>

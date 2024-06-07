@@ -53,8 +53,8 @@ export class HomecandidateComponent implements OnInit {
   loading: Job | null = null;
   mobileFiltersOpen = false;
   sortMenuOpen = false;
-  colorFiltersOpen = false;
-  categoryFiltersOpen = false;
+  colorFiltersOpen = true;
+  categoryFiltersOpen = true;
   pageSize = 10;
   currentPage = 0;
 
