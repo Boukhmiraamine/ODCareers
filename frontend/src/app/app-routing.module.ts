@@ -25,10 +25,11 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'homerecruiter', component: HomeRecruiterComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Recruiter' } },
   { path: 'homecandidate', component: HomecandidateComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Candidate' } },
-  { path: 'offresCandidates/:id', component: OffresCandidatesComponent },
+  { path: 'offresCandidates/:jobId', component: OffresCandidatesComponent },
   { path: 'job-detail', component: JobDetailComponent },
   { path: 'profile', component: ProfilecandidateComponent },
   { path: 'profile/settings', component: ProfilecandidatesettingsComponent },
+  { path: 'jobs/:jobId/applications', component: OffresCandidatesComponent },
 ];
 
 @NgModule({

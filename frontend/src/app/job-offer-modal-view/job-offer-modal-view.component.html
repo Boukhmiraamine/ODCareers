@@ -23,9 +23,8 @@
   <p>This is a fantastic opportunity to engage in a positive and creative work environment that offers excellent benefits and flexible schedules.</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close [routerLink]="['/offresCandidates', data.job.id]">
-    View {{ data.job.candidateCount }} Candidates
+  <button mat-button [routerLink]="['/offresCandidates', data.job.id]" mat-dialog-close>
+    View {{ applicationsCount }} Candidates
   </button>
   <button mat-button mat-dialog-close>Close</button>
 </mat-dialog-actions>
-

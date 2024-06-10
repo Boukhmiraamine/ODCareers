@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router'; // Import Router
 import { JobService } from '../job.service';
 import { AuthService } from '../auth-service.service';
 import { JobOfferModalViewComponent } from '../job-offer-modal-view/job-offer-modal-view.component';
@@ -55,7 +56,8 @@ export class HomeRecruiterComponent implements OnInit {
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private jobService: JobService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router // Inject Router
   ) {}
 
   ngOnInit(): void {
@@ -140,5 +142,10 @@ export class HomeRecruiterComponent implements OnInit {
 
   toggleDropdown(type: 'sort' | 'filters'): void {
     this.dropdowns[type] = !this.dropdowns[type];
+  }
+
+  // New method to navigate to the OffresCandidatesComponent
+  viewCandidates(jobId: string): void {
+    this.router.navigate(['/jobs', jobId, 'applications']);
   }
 }

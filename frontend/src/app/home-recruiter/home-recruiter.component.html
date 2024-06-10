@@ -1,173 +1,171 @@
-<!-- Add the navigation and filter code here as required -->
+<!-- Your existing template code -->
+<main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+    <h1 class="text-4xl tracking-tight text-gray-900 font-extrabold font-body">Job Offers</h1>
+    <div class="flex items-center">
+      <!-- Sort Button -->
+      <div class="relative inline-block text-left">
+        <div>
+          <button type="button" (click)="toggleDropdown('sort')" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" id="menu-button" aria-expanded="false" aria-haspopup="true">
+            Sort
+            <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <div [ngClass]="{'hidden': !dropdowns.sort}" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+          <div class="py-1" role="none">
+            <a href="#" class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
+            <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
+            <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Score: Low to High</a>
+            <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-4">Score: High to Low</a>
+          </div>
+        </div>
+      </div>
+      <!-- View grid button -->
+      <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
+        <span class="sr-only">View grid</span>
+        <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <button type="button" (click)="toggleDropdown('filters')" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
+        <span class="sr-only">Filters</span>
+        <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+  </div>
 
-<div class="bg-white">
-  <div>
-    <!-- Your existing template code -->
-    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-        <h1 class="text-4xl tracking-tight text-gray-900 font-extrabold font-body">Job Offers</h1>
-        <div class="flex items-center">
-          <!-- Sort Button -->
-          <div class="relative inline-block text-left">
-            <div>
-              <button type="button" (click)="toggleDropdown('sort')" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" id="menu-button" aria-expanded="false" aria-haspopup="true">
-                Sort
-                <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+  <section aria-labelledby="products-heading" class="pb-24 pt-6">
+    <h2 id="products-heading" class="sr-only">Products</h2>
+    <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+      <!-- Filters -->
+      <form class="hidden lg:block">
+        <div class="border-b border-gray-200 py-6">
+          <h3 class="-my-3 flow-root">
+            <!-- Expand/collapse section button -->
+            <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-0" aria-expanded="false">
+              <span class="font-medium text-gray-900">Location</span>
+              <span class="ml-6 flex items-center">
+                <!-- Expand icon, show/hide based on section open state. -->
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
+                <!-- Collapse icon, show/hide based on section open state. -->
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                </svg>
+              </span>
+            </button>
+          </h3>
+          <!-- Filter section, show/hide based on section state. -->
+          <div class="pt-6" id="filter-section-0">
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <input id="filter-location-city" name="location[]" value="city" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <label for="filter-location-city" class="ml-3 text-sm text-gray-600">City</label>
+              </div>
+              <div class="flex items-center">
+                <input id="filter-location-state" name="location[]" value="state" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <label for="filter-location-state" class="ml-3 text-sm text-gray-600">State</label>
+              </div>
+              <div class="flex items-center">
+                <input id="filter-location-country" name="location[]" value="country" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <label for="filter-location-country" class="ml-3 text-sm text-gray-600">Country</label>
+              </div>
+              <div class="flex items-center">
+                <input id="filter-location-remote" name="location[]" value="remote" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <label for="filter-location-remote" class="ml-3 text-sm text-gray-600">Remote</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Additional filters can go here -->
+      </form>
+      <!-- Job Listings -->
+      <div class="lg:col-span-3">
+        <main class="w-full flex-grow p-6">
+          <div class="flex justify-between">
+            <button (click)="openAddJobOfferDialog()" class="bg-orange-500 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-orange-700 focus:outline-none transition ease-linear duration-150">
+              <mat-icon>add</mat-icon>
+            </button>
+            <div class="relative text-gray-600 flex-none flex items-center justify-end">
+              <input type="search" name="search" placeholder="Search" class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none">
+              <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
+                <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
+                  <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"/>
                 </svg>
               </button>
             </div>
-            <div [ngClass]="{'hidden': !dropdowns.sort}" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-              <div class="py-1" role="none">
-                <a href="#" class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Score: Low to High</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-4">Score: High to Low</a>
-              </div>
-            </div>
           </div>
-          <!-- View grid button -->
-          <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-            <span class="sr-only">View grid</span>
-            <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z" clip-rule="evenodd" />
-            </svg>
-          </button>
-          <button type="button" (click)="toggleDropdown('filters')" class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
-            <span class="sr-only">Filters</span>
-            <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <section aria-labelledby="products-heading" class="pb-24 pt-6">
-        <h2 id="products-heading" class="sr-only">Products</h2>
-        <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-          <!-- Filters -->
-          <form class="hidden lg:block">
-            <div class="border-b border-gray-200 py-6">
-              <h3 class="-my-3 flow-root">
-                <!-- Expand/collapse section button -->
-                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-0" aria-expanded="false">
-                  <span class="font-medium text-gray-900">Location</span>
-                  <span class="ml-6 flex items-center">
-                    <!-- Expand icon, show/hide based on section open state. -->
-                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                    </svg>
-                    <!-- Collapse icon, show/hide based on section open state. -->
-                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                </button>
-              </h3>
-              <!-- Filter section, show/hide based on section state. -->
-              <div class="pt-6" id="filter-section-0">
-                <div class="space-y-4">
-                  <div class="flex items-center">
-                    <input id="filter-location-city" name="location[]" value="city" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-location-city" class="ml-3 text-sm text-gray-600">City</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-location-state" name="location[]" value="state" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-location-state" class="ml-3 text-sm text-gray-600">State</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-location-country" name="location[]" value="country" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-location-country" class="ml-3 text-sm text-gray-600">Country</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-location-remote" name="location[]" value="remote" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-location-remote" class="ml-3 text-sm text-gray-600">Remote</label>
+          <div class="w-full mt-6">
+            <!-- Start of job offers list -->
+            <div *ngFor="let job of jobOffers; let i = index" class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
+              <div class="flex items-start justify-between p-4">
+                <!-- Job details -->
+                <div class="flex">
+                  <div>
+                    <h3 class="text-xl leading-6 font-medium text-gray-900">
+                      {{ job.title }} | {{ job.city }}
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                      {{ job.description }}
+                    </p>
+                    <!-- Job function and domain -->
+                    <div class="mt-2">
+                      <span class="text-sm font-semibold text-gray-500">Function: </span>
+                      <span class="text-sm text-gray-900">{{ job.function }}</span>
+                      <span class="text-sm font-semibold text-gray-500"> | Domain: </span>
+                      <span class="text-sm text-gray-900">{{ job.domain }}</span>
+                    </div>
+                    <!-- Salary and contract type -->
+                    <div class="mt-2">
+                      <span class="text-sm font-semibold text-gray-500">Salary: </span>
+                      <span class="text-sm text-gray-900">{{ job.salary }}</span>
+                      <span class="text-sm font-semibold text-gray-500"> | Contract Type: </span>
+                      <span class="text-sm text-gray-900">{{ job.contractType }}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <!-- Additional filters can go here -->
-          </form>
-          <!-- Job Listings -->
-          <div class="lg:col-span-3">
-            <main class="w-full flex-grow p-6">
-              <div class="flex justify-between">
-                <button (click)="openAddJobOfferDialog()" class="bg-orange-500 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-orange-700 focus:outline-none transition ease-linear duration-150">
-                  <mat-icon>add</mat-icon>
-                </button>
-                <div class="relative text-gray-600 flex-none flex items-center justify-end">
-                  <input type="search" name="search" placeholder="Search" class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none">
-                  <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
-                    <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
-                      <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"/>
-                    </svg>
+                <!-- Menu button on the right -->
+                <div class="flex-none">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options menu">
+                    <mat-icon>more_vert</mat-icon>
                   </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialog(job)">
+                      <mat-icon>visibility</mat-icon>
+                      <span>View</span>
+                    </button>
+                    <button mat-menu-item (click)="openModifyDialog(job)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="deleteJobOffer(job._id)">
+                      <mat-icon>delete</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                    <button mat-menu-item (click)="viewCandidates(job._id)">
+                      <mat-icon>group</mat-icon>
+                      <span>View Candidates</span>
+                    </button>
+                  </mat-menu>
                 </div>
               </div>
-              <div class="w-full mt-6">
-                <!-- Start of job offers list -->
-                <div *ngFor="let job of jobOffers; let i = index" class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
-                  <div class="flex items-start justify-between p-4">
-                    <!-- Job details -->
-                    <div class="flex">
-                      <div>
-                        <h3 class="text-xl leading-6 font-medium text-gray-900">
-                          {{ job.title }} | {{ job.city }}
-                        </h3>
-                        <p class="mt-1 text-sm text-gray-500">
-                          {{ job.description }}
-                        </p>
-                        <!-- Job function and domain -->
-                        <div class="mt-2">
-                          <span class="text-sm font-semibold text-gray-500">Function: </span>
-                          <span class="text-sm text-gray-900">{{ job.function }}</span>
-                          <span class="text-sm font-semibold text-gray-500"> | Domain: </span>
-                          <span class="text-sm text-gray-900">{{ job.domain }}</span>
-                        </div>
-                        <!-- Salary and contract type -->
-                        <div class="mt-2">
-                          <span class="text-sm font-semibold text-gray-500">Salary: </span>
-                          <span class="text-sm text-gray-900">{{ job.salary }}</span>
-                          <span class="text-sm font-semibold text-gray-500"> | Contract Type: </span>
-                          <span class="text-sm text-gray-900">{{ job.contractType }}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Menu button on the right -->
-                    <div class="flex-none">
-                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options menu">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="openDialog(job)">
-                          <mat-icon>visibility</mat-icon>
-                          <span>View</span>
-                        </button>
-                        <button mat-menu-item (click)="openModifyDialog(job)">
-                          <mat-icon>edit</mat-icon>
-                          <span>Edit</span>
-                        </button>
-                        <button mat-menu-item (click)="deleteJobOffer(job._id)">
-                          <mat-icon>delete</mat-icon>
-                          <span>Delete</span>
-                        </button>
-                      </mat-menu>
-                    </div>
-                  </div>
-                </div>
-                <!-- End of job offers list -->
-              </div>
-            <mat-paginator
-              [length]="totalJobs"
-              [pageSize]="pageSize"
-              [pageSizeOptions]="pageSizeOptions"
-              (page)="onPageChange($event)"
-              aria-label="Job offers paginator">
-            </mat-paginator>            
-          </main>
+            </div>
+            <!-- End of job offers list -->
           </div>
-        </div>
-      </section>
-    </main>
-  </div>
-</div>
+        <mat-paginator
+          [length]="totalJobs"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPageChange($event)"
+          aria-label="Job offers paginator">
+        </mat-paginator>            
+      </main>
+      </div>
+    </div>
+  </section>
+</main>

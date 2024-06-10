@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { JobService } from '../job.service';
 
 export interface JobOffer {
-  id?: string; // Change this to string
+  id?: string;
   title: string;
   city: string;
   companyName: string;

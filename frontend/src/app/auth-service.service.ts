@@ -27,7 +27,7 @@ export class AuthService {
     this.loginStatusSubject.next(this.hasToken());
   }
 
-  private hasToken(): boolean {
+  public hasToken(): boolean {
     return !!localStorage.getItem('authToken');
   }
 

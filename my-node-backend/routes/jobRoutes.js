@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const jobController = require('../controllers/JobController');
-const { logSearchActivity, logViewActivity } = require('../middlewares/activityLogger');
 const jwt = require('jsonwebtoken');
 
 function authenticate(req, res, next) {
@@ -30,16 +29,13 @@ function checkIfRecruiter(req, res, next) {
 
 router.post('/', authenticate, checkIfRecruiter, jobController.createJob);
 router.get('/', authenticate, jobController.getAllJobs);
-router.get('/byRecruiter', authenticate, jobController.getJobsByRecruiter); // Added new route
-router.get('/search', authenticate, logSearchActivity, jobController.getJobs);
-router.get('/:id', authenticate, logViewActivity, jobController.getJobById);
+router.get('/byRecruiter', authenticate, jobController.getJobsByRecruiter);
+router.get('/search', authenticate, jobController.getJobs);
+router.get('/:id', authenticate, jobController.getJobById);
 router.put('/:id', authenticate, checkIfRecruiter, jobController.updateJob);
 router.delete('/:id', authenticate, checkIfRecruiter, jobController.deleteJob);
-router.get('/match/:jobId/:candidateId', authenticate, jobController.matchSkills);
 router.post('/:jobId/apply', authenticate, jobController.applyToJob);
 router.get('/:jobId/applications', authenticate, checkIfRecruiter, jobController.getApplicationsByJob);
-router.put('/applications/:applicationId/status', authenticate, checkIfRecruiter, jobController.updateApplicationStatus);
 router.put('/:jobId/applications/:candidateId/status', authenticate, checkIfRecruiter, jobController.updateApplicationStatus);
-
 
 module.exports = router;

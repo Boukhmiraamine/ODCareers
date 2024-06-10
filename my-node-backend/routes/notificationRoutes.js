@@ -6,7 +6,8 @@ const {
     markNotificationRead,
     deleteNotification,
     getNotificationsForRecruiter,
-    getNotificationsForCandidate
+    getNotificationsForCandidate,
+    sendNotification
 } = require('../controllers/notificationController');
 const jwt = require('jsonwebtoken');
 
@@ -47,5 +48,6 @@ router.put('/notifications/:id/read', authenticate, markNotificationRead);
 router.delete('/:id', authenticate, deleteNotification);
 router.get('/recruiter/:userId', authenticate, checkIfRecruiter, getNotificationsForRecruiter);
 router.get('/candidate/:userId', authenticate, checkIfCandidate, getNotificationsForCandidate);
+router.post('/send', authenticate, sendNotification);  // Ensure this line is correct
 
 module.exports = router;

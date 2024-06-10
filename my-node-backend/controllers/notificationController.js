@@ -63,11 +63,42 @@ async function getNotificationsForCandidate(req, res) {
     }
 }
 
+async function sendNotification(req, res) {
+    const { recipientId, message, recipientType, senderId, senderType, link } = req.body;
+
+    console.log('sendNotification called with:', { recipientId, message, recipientType, senderId, senderType, link });
+
+    try {
+        if (!recipientId || !message || !recipientType || !senderId || !senderType || !link) {
+            console.log('Invalid request data', { recipientId, message, recipientType, senderId, senderType, link });
+            return res.status(400).json({ message: 'Invalid request data' });
+        }
+
+        const newNotification = new Notification({
+            recipient: recipientId,
+            message: message,
+            recipientType: recipientType,
+            sender: senderId,
+            senderType: senderType,
+            link: link,
+            read: false
+        });
+
+        await newNotification.save();
+        res.status(201).json({ message: 'Notification sent successfully', notification: newNotification });
+    } catch (error) {
+        console.error('Error in sendNotification:', error);
+        res.status(500).json({ message: 'Failed to send notification', error: error.message });
+    }
+}
+
+
 module.exports = {
     getAllNotifications,
     getNotification,
     markNotificationRead,
     deleteNotification,
     getNotificationsForRecruiter,
-    getNotificationsForCandidate
+    getNotificationsForCandidate,
+    sendNotification
 };

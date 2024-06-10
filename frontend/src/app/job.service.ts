@@ -76,15 +76,6 @@ export class JobService {
     );
   }
 
-  updateApplicationStatus(jobId: string, candidateId: string, status: string): Observable<any> {
-    return this.http.put<any>(`${this.jobUrl}/${jobId}/applications/${candidateId}/status`, { status }, { headers: this.getAuthHeaders() }).pipe(
-      catchError(error => {
-        console.error('Error updating application status:', error);
-        return throwError(() => new Error('Failed to update application status: ' + (error.error?.message || error.statusText)));
-      })
-    );
-  }
-
   getApplicationsByJob(jobId: string): Observable<any> {
     return this.http.get<any>(`${this.jobUrl}/${jobId}/applications`, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
@@ -94,6 +85,25 @@ export class JobService {
     );
   }
 
+  updateApplicationStatus(jobId: string, candidateId: string, status: string): Observable<any> {
+    return this.http.put<any>(`${this.jobUrl}/${jobId}/applications/${candidateId}/status`, { status }, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error updating application status:', error);
+        return throwError(() => new Error('Failed to update application status: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  sendNotification(recipientId: string, message: string, recipientType: string, senderId: string, senderType: string, link: string): Observable<any> {
+    const payload = { recipientId, message, recipientType, senderId, senderType, link };
+    return this.http.post<any>(`${this.notificationUrl}/send`, payload, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error sending notification:', error);
+        return throwError(() => new Error('Failed to send notification: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }  
+  
   getNotifications(): Observable<any> {
     return this.http.get<any>(this.notificationUrl, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {

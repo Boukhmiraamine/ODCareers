@@ -1,4 +1,4 @@
-<div class="bg-white">
+<div class="bg-white z-10 mt-20">
   <div class="absolute inset-0 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
     <div class="relative w-full h-64 bg-gradient-to-tr from-[#FF7900] to-[#FF7900] opacity-30" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%);"></div>
   </div>
@@ -6,14 +6,14 @@
     <div class="flex items-center justify-center pb-6">
       <div class="relative w-full max-w-4xl">
         <!-- Search Bar -->
-        <div class="relative flex items-center bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="relative flex items-center bg-white shadow-md rounded-lg overflow-hidden h-14">
           <div class="relative flex items-center w-full">
             <i class="fas fa-search absolute left-4 text-gray-400"></i>
-            <input type="text" class="block w-full pl-12 pr-4 py-4 border-none focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Intitulé de poste, mots-clés ou entreprise">
+            <input type="text" class="block w-full pl-12 pr-4 py-4" placeholder="Intitulé de poste, mots-clés ou entreprise">
           </div>
           <div class="relative flex items-center w-full border-l border-gray-200">
             <i class="fas fa-map-marker-alt absolute left-4 text-gray-400"></i>
-            <input type="text" class="block w-full pl-12 pr-4 py-4 border-none focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Casablanca">
+            <input type="text" class="block w-full pl-12 pr-4 py-4 " placeholder="Casablanca">
           </div>
           <button class="bg-orange-500 text-white font-bold py-4 px-6 hover:bg-orange-600">
             <mat-icon>search</mat-icon>
@@ -59,10 +59,10 @@
 
       <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
         <!-- Filters -->
-        <form class="hidden lg:block bg-gray-100 p-4 rounded-lg shadow-md">
+        <form class="hidden lg:block bg-gray-50 p-4 rounded-lg shadow-md">
           <div class="border-b border-gray-200 py-6">
             <h3 class="-my-3 flow-root">
-              <button type="button" class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500" (click)="toggleColorFilters()" [attr.aria-expanded]="colorFiltersOpen">
+              <button type="button" class="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-200" (click)="toggleColorFilters()" [attr.aria-expanded]="colorFiltersOpen">
                 <span class="font-medium text-gray-900">Location</span>
                 <span class="ml-6 flex items-center">
                   <i class="fas" [ngClass]="colorFiltersOpen ? 'fa-minus' : 'fa-plus' " class="h-5 w-5"></i>
@@ -72,19 +72,19 @@
             <div class="pt-6" *ngIf="colorFiltersOpen">
               <div class="space-y-4">
                 <div class="flex items-center">
-                  <input id="filter-color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <input id="filter-color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500">
                   <label for="filter-color-0" class="ml-3 text-sm text-gray-600">State</label>
                 </div>
                 <div class="flex items-center">
-                  <input id="filter-color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <input id="filter-color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500">
                   <label for="filter-color-1" class="ml-3 text-sm text-gray-600">Country</label>
                 </div>
                 <div class="flex items-center">
-                  <input id="filter-color-2" name="color[]" value="blue" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <input id="filter-color-2" name="color[]" value="blue" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500">
                   <label for="filter-color-2" class="ml-3 text-sm text-gray-600">City</label>
                 </div>
                 <div class="flex items-center">
-                  <input id="filter-color-3" name="color[]" value="brown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <input id="filter-color-3" name="color[]" value="brown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500">
                   <label for="filter-color-3" class="ml-3 text-sm text-gray-600">Remote</label>
                 </div>
               </div>
@@ -143,10 +143,10 @@
                       <div class="text-sm mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }}</div>
                     </div>
                     <button mat-icon-button (click)="toggleExpand(job)">
-                      <mat-icon>{{ job.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+                      <mat-icon>{{ job.expanded ? 'expand_more' : 'expand_less' }}</mat-icon>
                     </button>
                   </div>
-                  <div *ngIf="job.expanded" class="expanded-content">
+                  <div *ngIf="!job.expanded" class="expanded-content">
                     <div class="text-sm mb-2">{{ job.description }}</div>
                     <div class="flex flex-wrap gap-2 mt-2">
                       <span class="bg-blue-200 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800" *ngFor="let skill of job.requiredSkills">{{ skill }}</span>

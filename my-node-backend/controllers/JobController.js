@@ -57,14 +57,15 @@ exports.getJobsByRecruiter = async (req, res) => {
 exports.getJobById = async (req, res) => {
     console.log("Fetching job by ID:", req.params.id);
     try {
-        const job = await Job.findById(req.params.id).populate('recruiter');
+        const job = await Job.findById(req.params.id).populate('recruiter').populate('applications');
         if (!job) {
             return res.status(404).json({ message: 'Job not found' });
         }
         if (!job.isApproved) {
             return res.status(403).json({ message: 'Job not approved yet' });
         }
-        res.status(200).json(job);
+        const applicationsCount = job.applications.length;
+        res.status(200).json({ job, applicationsCount });
     } catch (error) {
         console.error("Error fetching job by ID:", error);
         res.status(500).json({ message: error.message });
@@ -231,7 +232,7 @@ exports.getApplicationsByJob = async (req, res) => {
     try {
         const applications = await Application.find({ job: jobId }).populate({
             path: 'candidate',
-            select: 'username fullName email'
+            select: 'username fullName email profilePicture position summary status educations experiences certifications'
         });
 
         if (!applications.length) {
@@ -244,7 +245,7 @@ exports.getApplicationsByJob = async (req, res) => {
     }
 };
 
-// Update application status
+// Update application status and send notification
 exports.updateApplicationStatus = async (req, res) => {
     const { jobId, candidateId } = req.params;
     const { status } = req.body;
@@ -270,9 +271,9 @@ exports.updateApplicationStatus = async (req, res) => {
         const notificationMessage = `Your application for the position ${jobTitle} has been updated to ${status} by ${recruiterName}.`;
 
         await sendNotification(
-            req.user._id,
+            req.user.id, // Recruiter ID
             'Recruiter',
-            application.candidate,
+            candidateId, // Candidate ID
             'Candidate',
             notificationMessage,
             `/applications/${application._id}`
@@ -283,27 +284,23 @@ exports.updateApplicationStatus = async (req, res) => {
         console.error("Failed to update application status:", error);
         res.status(500).json({ message: "Failed to update application status", error: error.message });
     }
-};
+};;
 
-
-
-// Get applications by job ID
-exports.getApplicationsByJob = async (req, res) => {
-    const { jobId } = req.params;
-  
+// Helper function to send notifications
+exports.sendNotification = async (senderId, senderType, recipientId, recipientType, message, link) => {
     try {
-      const applications = await Application.find({ job: jobId }).populate({
-        path: 'candidate',
-        select: 'username fullName email'
-      });
-  
-      if (!applications.length) {
-        return res.status(404).json({ message: 'No applications found for this job.' });
-      }
-  
-      res.status(200).json({ applications });
+        const notification = new Notification({
+            sender: senderId,
+            senderType: senderType,
+            recipient: recipientId,
+            recipientType: recipientType,
+            message: message,
+            link: link,
+            read: false
+        });
+        await notification.save();
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch applications", error: error.message });
+        console.error('Error sending notification:', error);
+        throw new Error('Failed to send notification');
     }
-  };
-  
+};

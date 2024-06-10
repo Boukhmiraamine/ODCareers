@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+import { JobService } from '../job.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Candidate {
-  id: number;
-  name: string;
+  id: string;
+  fullName: string;
   position: string;
-  avatarUrl: string;
-  summary: string;
-  status: 'waiting' | 'accepted' | 'refused';
+  profilePicture: string;
+  email: string;
+  status: 'Pending' | 'Accepted' | 'Rejected';
 }
 
 @Component({
@@ -15,167 +16,109 @@ export interface Candidate {
   templateUrl: './offres-candidates.component.html',
   styleUrls: ['./offres-candidates.component.css']
 })
-export class OffresCandidatesComponent {
-
-  totalJobs = 100; 
+export class OffresCandidatesComponent implements OnInit {
+  jobId: string = '';
+  waitingCandidates: Candidate[] = [];
+  acceptedCandidates: Candidate[] = [];
+  refusedCandidates: Candidate[] = [];
+  totalCandidates = 0;
   pageSize = 10;
 
-  candidates: Candidate[] = [
-    // Waiting candidates
-    {
-      id: 1,
-      name: 'Jane Doe',
-      position: 'Software Engineer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Experienced in Angular and TypeScript.',
-      status: 'waiting'
-    },
-    {
-      id: 2,
-      name: 'Robert Turner',
-      position: 'Web Developer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Proficient in React and Node.js.',
-      status: 'waiting'
-    },
-    {
-      id: 3,
-      name: 'Emily Clarkson',
-      position: 'Data Analyst',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Expert in data visualization and Python.',
-      status: 'waiting'
-    },
-    {
-      id: 4,
-      name: 'Mohamed Al Fayed',
-      position: 'System Architect',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Specializes in system security and architecture.',
-      status: 'waiting'
-    },
-    {
-      id: 5,
-      name: 'Lucy Liu',
-      position: 'Network Engineer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Experienced with Cisco systems and network troubleshooting.',
-      status: 'waiting'
-    },
-  
-    // Accepted candidates
-    {
-      id: 6,
-      name: 'John Smith',
-      position: 'Project Manager',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Strong background in project management and team leadership.',
-      status: 'accepted'
-    },
-    {
-      id: 7,
-      name: 'Angela Hart',
-      position: 'HR Specialist',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Experienced in HR operations and employee management.',
-      status: 'accepted'
-    },
-    {
-      id: 8,
-      name: 'Samuel Jackson',
-      position: 'Marketing Director',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Expert in digital marketing strategies and brand development.',
-      status: 'accepted'
-    },
-    {
-      id: 9,
-      name: 'Chloe Kim',
-      position: 'Sales Manager',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Strong sales background with extensive B2B experience.',
-      status: 'accepted'
-    },
-    {
-      id: 10,
-      name: 'Leo Gonzalez',
-      position: 'Chief Financial Officer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Deep expertise in finance management and strategic investments.',
-      status: 'accepted'
-    },
-  
-    // Refused candidates
-    {
-      id: 11,
-      name: 'Alice Johnson',
-      position: 'UI/UX Designer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Skilled in designing intuitive user interfaces.',
-      status: 'refused'
-    },
-    {
-      id: 12,
-      name: 'Mark Renner',
-      position: 'Product Manager',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Experienced in product lifecycle management and user-centric design.',
-      status: 'refused'
-    },
-    {
-      id: 13,
-      name: 'Sophia Loren',
-      position: 'Content Creator',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Creative writer and content strategist with a focus on tech startups.',
-      status: 'refused'
-    },
-    {
-      id: 14,
-      name: 'David Guetta',
-      position: 'Sound Engineer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Experienced in studio engineering and sound design.',
-      status: 'refused'
-    },
-    {
-      id: 15,
-      name: 'Tara Smith',
-      position: 'Chief Operating Officer',
-      avatarUrl: 'https://via.placeholder.com/150',
-      summary: 'Proven leadership in operations and efficiency improvement.',
-      status: 'refused'
+  constructor(private jobService: JobService, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.jobId = params.get('jobId') || '';
+      if (this.jobId) {
+        this.loadCandidates();
+      } else {
+        console.error('No jobId found in route parameters.');
+      }
+    });
+  }
+
+  loadCandidates(): void {
+    if (!this.jobId) {
+      console.error('Cannot load candidates, jobId is not defined');
+      return;
     }
-  ];
-  
 
-  get waitingCandidates() {
-    return this.candidates.filter(c => c.status === 'waiting');
+    this.jobService.getApplicationsByJob(this.jobId).subscribe({
+      next: (response) => {
+        this.totalCandidates = response.applications.length;
+        this.waitingCandidates = response.applications.filter((app: any) => app.status === 'Pending').map(this.mapCandidate);
+        this.acceptedCandidates = response.applications.filter((app: any) => app.status === 'Accepted').map(this.mapCandidate);
+        this.refusedCandidates = response.applications.filter((app: any) => app.status === 'Rejected').map(this.mapCandidate);
+      },
+      error: (error: any) => {
+        console.error('Error fetching applications:', error);
+      }
+    });
   }
 
-  get acceptedCandidates() {
-    return this.candidates.filter(c => c.status === 'accepted');
+  mapCandidate(app: any): Candidate {
+    const profilePicture = app.candidate.profilePicture ? `/uploads/${app.candidate.profilePicture}` : '';
+    return {
+      id: app.candidate._id,
+      fullName: app.candidate.fullName,
+      position: app.candidate.position || '',
+      profilePicture: profilePicture,
+      email: app.candidate.email || '',
+      status: app.status
+    };
   }
 
-  get refusedCandidates() {
-    return this.candidates.filter(c => c.status === 'refused');
+  acceptCandidate(candidate: Candidate): void {
+    this.jobService.updateApplicationStatus(this.jobId, candidate.id, 'Accepted').subscribe({
+      next: () => {
+        const message = `Your application for job ID ${this.jobId} has been accepted.`;
+        const link = `/applications/${candidate.id}`; // This should be the appropriate link for your application
+        const recipientType = 'Candidate'; // Assuming candidate is the recipient
+        const senderId = 'recruiter-id'; // Replace with actual recruiter ID
+        const senderType = 'Recruiter';
+
+        this.jobService.sendNotification(candidate.id, message, recipientType, senderId, senderType, link).subscribe({
+          next: () => {
+            this.loadCandidates(); // Reload the candidates
+          },
+          error: (error: any) => {
+            console.error('Error sending notification:', error);
+          }
+        });
+      },
+      error: (error: any) => {
+        console.error('Error accepting candidate:', error);
+      }
+    });
+  }
+
+  refuseCandidate(candidate: Candidate): void {
+    this.jobService.updateApplicationStatus(this.jobId, candidate.id, 'Rejected').subscribe({
+      next: () => {
+        const message = `Your application for job ID ${this.jobId} has been rejected.`;
+        const link = `/applications/${candidate.id}`; // This should be the appropriate link for your application
+        const recipientType = 'Candidate'; // Assuming candidate is the recipient
+        const senderId = 'recruiter-id'; // Replace with actual recruiter ID
+        const senderType = 'Recruiter';
+
+        this.jobService.sendNotification(candidate.id, message, recipientType, senderId, senderType, link).subscribe({
+          next: () => {
+            this.loadCandidates(); // Reload the candidates
+          },
+          error: (error: any) => {
+            console.error('Error sending notification:', error);
+          }
+        });
+      },
+      error: (error: any) => {
+        console.error('Error refusing candidate:', error);
+      }
+    });
   }
 
   viewProfile(candidate: Candidate) {
     console.log('Viewing profile:', candidate);
     // Placeholder for profile viewing logic
-  }
-
-  acceptCandidate(candidate: Candidate) {
-    candidate.status = 'accepted';
-    console.log('Accepted:', candidate);
-    // Placeholder for update logic
-  }
-
-  refuseCandidate(candidate: Candidate) {
-    candidate.status = 'refused';
-    console.log('Refused:', candidate);
-    // Placeholder for update logic
   }
 
   onPageChange(): void {
