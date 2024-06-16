@@ -130,9 +130,6 @@
         <!-- Job Cards -->
         <div class="lg:col-span-3">
           <div class="flex flex-col items-center justify-center my-4">
-            <div *ngIf="loading" class="loader-overlay">
-              <mat-spinner diameter="50"></mat-spinner>
-            </div>
             <ng-container *ngFor="let job of pagedJobs">
               <mat-card class="transition-all duration-1000 ease-in-out mb-2 bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden" [ngClass]="{'w-5/6': !job.expanded, 'w-11/12': job.expanded}">
                 <mat-card-content>
@@ -152,23 +149,8 @@
                       <span class="bg-blue-200 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800" *ngFor="let skill of job.requiredSkills">{{ skill }}</span>
                     </div>
                   </div>
-                  <div [@expandCollapse]="job.showMatchingSkills ? 'expanded' : 'collapsed'" class="expanded-content mt-4 p-4 bg-gray-200 rounded-lg">
-                    <div class="flex justify-between">
-                      <div>
-                        <h3 class="text-lg font-bold flex items-center"><i class="fas fa-tools mr-2"></i>Matched skills</h3>
-                        <div class="flex flex-wrap gap-2">
-                          <span class="bg-blue-200 text-orange-600 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800" *ngFor="let skill of job.requiredSkills">{{ skill }}</span>
-                        </div>
-                      </div>
-                      <div class="score">
-                        <h3 class="text-lg font-bold flex items-center"><i class="fas fa-chart-line mr-2"></i>Match Score</h3>
-                        <div class="text-xl font-bold text-orange-600">100 %</div>
-                      </div>
-                    </div>
-                  </div>
                 </mat-card-content>
                 <mat-card-actions class="justify-end gap-3">
-                  <button mat-raised-button color="orange" *ngIf="!loading" (click)="showMatchingSkills(job)">Matching Skills</button>
                   <button mat-raised-button color="primary" (click)="applyForJob(job)">Apply</button>
                 </mat-card-actions>
               </mat-card>

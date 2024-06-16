@@ -1,45 +1,69 @@
+const multer = require('multer');
+const path = require('path');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const Recruiter = require('../models/Recruiter');
 const Candidate = require('../models/Candidate');
 const Admin = require('../models/Admin');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
-exports.signup = async (req, res) => {
-  const { userType, username, email, password, fullName, status, address, telephone, age } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  let Model;
-
-  switch (userType) {
-    case 'Recruiter':
-      Model = Recruiter;
-      break;
-    case 'Candidate':
-      Model = Candidate;
-      break;
-    case 'Admin':
-      Model = Admin;
-      break;
-    default:
-      return res.status(400).json({ message: "Invalid user type" });
+// Multer configuration for file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
   }
+});
 
-  try {
-    const newUser = new Model({
-      username,
-      email,
-      password: hashedPassword,
-      fullName,
-      status,
-      address,
-      telephone,
-      age
-    });
+const upload = multer({ storage: storage }).single('companyLogo');
 
-    await newUser.save();
-    res.status(201).json({ message: "User registered successfully!", userType: userType });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to register user", error: error.message });
-  }
+exports.signup = (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(500).json({ message: "File upload failed", error: err.message });
+    }
+
+    const { userType, username, email, password, recruiterFullName, recruiterProfessionalTitle, companyName, bio, activitySector, addressCompany, companyEmail, companyPhoneNumber } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    let Model;
+
+    switch (userType) {
+      case 'Recruiter':
+        Model = Recruiter;
+        break;
+      case 'Candidate':
+        Model = Candidate;
+        break;
+      case 'Admin':
+        Model = Admin;
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid user type" });
+    }
+
+    try {
+      const newUser = new Model({
+        username,
+        email,
+        password: hashedPassword,
+        recruiterFullName,
+        recruiterProfessionalTitle,
+        companyName,
+        bio,
+        activitySector,
+        addressCompany,
+        companyEmail,
+        companyPhoneNumber,
+        companyLogo: req.file ? req.file.path : ''
+      });
+
+      await newUser.save();
+      res.status(201).json({ message: "User registered successfully!", userType: userType });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to register user", error: error.message });
+    }
+  });
 };
 
 exports.signin = async (req, res) => {

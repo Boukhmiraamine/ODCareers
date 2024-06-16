@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignupComponent } from './signup/signup.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupRecruterComponent } from './signup-recruter/signup-recruter.component';
 import { NavbarLandingComponent } from './navbar-landing/navbar-landing.component';
@@ -23,9 +22,9 @@ import { SignupCandidatsComponent } from './signup-candidats/signup-candidats.co
 import { HttpClientModule } from '@angular/common/http';
 import { ContactComponent } from './contact/contact.component';
 import { HomeRecruiterComponent } from './home-recruiter/home-recruiter.component';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { JobOfferModalViewComponent } from './job-offer-modal-view/job-offer-modal-view.component';
 import { ProfileRecruiterComponent } from './profile-recruiter/profile-recruiter.component';
@@ -48,10 +47,11 @@ import { EducationDialogComponent } from './educationdialog/educationdialog.comp
 import { ExperienceDialogComponent } from './experience-dialog/experience-dialog.component';
 import { CertificationDialogComponent } from './certification-dialog/certification-dialog.component';
 import { MatTableModule } from '@angular/material/table';
-
-
-
-
+import { PlanInterviewComponent } from './planinterview/planinterview.component';
+import { InterviewComponent } from './interview/interview.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -79,7 +79,9 @@ import { MatTableModule } from '@angular/material/table';
     ProfilecandidatesettingsComponent,
     EducationDialogComponent,
     ExperienceDialogComponent,
-    CertificationDialogComponent
+    CertificationDialogComponent,
+    PlanInterviewComponent,
+    InterviewComponent
   ],
   imports: [
     BrowserModule,
@@ -92,41 +94,23 @@ import { MatTableModule } from '@angular/material/table';
     MatInputModule,
     MatButtonModule,
     HttpClientModule,
-    MatButtonModule, 
     MatMenuModule,
     MatIconModule,
     MatPaginatorModule,
     MatDialogModule,
     MatTabsModule,
     MatCardModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatCardModule,
     MatSnackBarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatCardModule,
     MatProgressSpinnerModule,
-    MatTabsModule,
     MatTableModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    MatDialogModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    FileUploadModule,
+    ToastModule
   ],
-  exports: [
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule
-  ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -28,9 +28,7 @@ interface Job {
     _id: string;
     candidate: string;
   }>;
-  matchScore: number;
   expanded: boolean;
-  showMatchingSkills: boolean;
 }
 
 @Component({
@@ -50,7 +48,6 @@ interface Job {
 export class HomecandidateComponent implements OnInit {
   jobs: Job[] = [];
   pagedJobs: Job[] = [];
-  loading: Job | null = null;
   mobileFiltersOpen = false;
   sortMenuOpen = false;
   colorFiltersOpen = true;
@@ -72,7 +69,6 @@ export class HomecandidateComponent implements OnInit {
         this.jobs = jobs.map((job: any) => ({
           ...job,
           expanded: false,
-          showMatchingSkills: false
         }));
         this.updatePagedJobs();
       },
@@ -84,14 +80,6 @@ export class HomecandidateComponent implements OnInit {
 
   toggleExpand(job: Job) {
     job.expanded = !job.expanded;
-  }
-
-  showMatchingSkills(job: Job) {
-    this.loading = job;
-    setTimeout(() => {
-      this.loading = null;
-      job.showMatchingSkills = true;
-    }, 2000);
   }
 
   applyForJob(job: Job) {

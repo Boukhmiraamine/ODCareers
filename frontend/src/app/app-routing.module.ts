@@ -15,6 +15,7 @@ import { roleGuard } from './role.guard';
 import { loginGuard } from './login.guard';
 import { ProfilecandidateComponent } from './profilecandidate/profilecandidate.component';
 import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/profilecandidatesettings.component';
+import { PlanInterviewComponent} from './planinterview/planinterview.component';
 
 const routes: Routes = [
   { path: '', component: HomeLandingComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfilecandidateComponent },
   { path: 'profile/settings', component: ProfilecandidatesettingsComponent },
   { path: 'jobs/:jobId/applications', component: OffresCandidatesComponent },
+  { path: 'plan-interview/:candidateId', component: PlanInterviewComponent },
 ];
 
 @NgModule({

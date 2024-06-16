@@ -1,4 +1,6 @@
 const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
@@ -8,10 +10,13 @@ const adminRoutes = require('./routes/adminRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const recruiterRoutes = require('./routes/recruiterRoutes');
+const interviewRoutes = require('./routes/interviewRoutes');
 const { mongoURI, port } = require('./config/config');
 const path = require('path');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -27,14 +32,44 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/recruiters', recruiterRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/interviews', interviewRoutes);
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('MongoDB connected');
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
+
+// WebSocket handling
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('join', (room) => {
+    socket.join(room);
+    console.log(`Client joined room: ${room}`);
+  });
+
+  socket.on('offer', (data) => {
+    console.log('Offer received:', data);
+    socket.to(data.room).emit('offer', data.offer);
+  });
+
+  socket.on('answer', (data) => {
+    console.log('Answer received:', data);
+    socket.to(data.room).emit('answer', data.answer);
+  });
+
+  socket.on('candidate', (data) => {
+    console.log('Candidate received:', data);
+    socket.to(data.room).emit('candidate', data.candidate);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});

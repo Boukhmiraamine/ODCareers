@@ -9,21 +9,23 @@ const Notification = require('../models/Notification');
  * @param {string} message 
  * @param {string} link 
  */
-async function sendNotification(senderId, senderType, recipientId, recipientType, message, link) {
-  const notification = new Notification({
-    sender: senderId,
-    senderType: senderType,
-    recipient: recipientId,
-    recipientType: recipientType,
-    message: message,
-    link: link
-  });
-
+async function sendNotification(recipientId, message, recipientType, senderId, senderType, link) {
   try {
-    await notification.save();a
-    console.log("Notification sent successfully.");
+      const notification = new Notification({
+          recipient: recipientId,
+          message: message,
+          recipientType: recipientType,
+          sender: senderId,
+          senderType: senderType,
+          link: link,
+          read: false
+      });
+
+      await notification.save();
+      console.log('Notification sent:', notification);
   } catch (error) {
-    console.error("Error sending notification:", error);
+      console.error('Error in sendNotification:', error);
+      throw error;
   }
 }
 

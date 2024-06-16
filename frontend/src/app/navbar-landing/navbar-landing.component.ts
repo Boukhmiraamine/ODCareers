@@ -14,6 +14,7 @@ export class NavbarLandingComponent implements OnInit {
   notificationDropdownOpen = false;
   loggedInUserId: string | null = null;
   notifications: any[] = [];
+  userType: 'Candidate' | 'Recruiter' | null = null;
 
   constructor(
     private authService: AuthService,
@@ -35,6 +36,7 @@ export class NavbarLandingComponent implements OnInit {
     const token = this.authService.getToken();
     this.isLoggedIn = !!token;
     this.loggedInUserId = this.authService.getLoggedInUserId();
+    this.userType = this.authService.getLoggedInUserType() as 'Candidate' | 'Recruiter' | null;
   }
 
   toggleDropdown(): void {
@@ -47,14 +49,25 @@ export class NavbarLandingComponent implements OnInit {
 
   fetchNotifications(): void {
     if (this.loggedInUserId) {
-      this.jobService.getRecruiterNotifications(this.loggedInUserId).subscribe(
-        response => {
-          this.notifications = response;
-        },
-        error => {
-          console.error('Error fetching notifications', error);
-        }
-      );
+      if (this.userType === 'Recruiter') {
+        this.jobService.getRecruiterNotifications(this.loggedInUserId).subscribe(
+          response => {
+            this.notifications = response;
+          },
+          error => {
+            console.error('Error fetching recruiter notifications', error);
+          }
+        );
+      } else if (this.userType === 'Candidate') {
+        this.jobService.getCandidateNotifications(this.loggedInUserId).subscribe(
+          response => {
+            this.notifications = response;
+          },
+          error => {
+            console.error('Error fetching candidate notifications', error);
+          }
+        );
+      }
     }
   }
 
@@ -73,6 +86,7 @@ export class NavbarLandingComponent implements OnInit {
     this.authService.logout();
     this.isLoggedIn = false;
     this.loggedInUserId = null;
+    this.userType = null;
     this.router.navigate(['/login']); // Redirect to login page on logout
   }
 }

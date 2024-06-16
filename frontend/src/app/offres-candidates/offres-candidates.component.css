@@ -1,20 +1,102 @@
-.profiles-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: center;
-    margin-top: 50px;
-    margin-bottom: 10px;
-  }
-  
-  .profile-card {
-    width: 800px;
-  }
-  
-  .profile-image {
-    background-size: cover;
-    background-position: center;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+:root {
+  --color-gray-800: #2d3748;
+  --color-gray-900: #1a202c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+}
 
-  
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.profile-card {
+  position: relative;
+}
+
+.loader-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.profile-image {
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+}
+
+.placeholder-text {
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  padding: 2rem;
+}
+
+.expanded-content {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+button[class*="bg-orange-500"] {
+  background-color: var(--color-orange-500);
+}
+
+button[class*="bg-orange-500"]:hover {
+  background-color: var(--color-orange-600);
+}
+
+button[class*="bg-gray-900"] {
+  background-color: var(--color-gray-900);
+}
+
+button[class*="bg-gray-900"]:hover {
+  background-color: var(--color-gray-800);
+}
+
+button[class*="bg-green-500"] {
+  background-color: #4caf50;
+}
+
+button[class*="bg-green-500"]:hover {
+  background-color: #388e3c;
+}
+
+button[class*="bg-red-500"] {
+  background-color: #f44336;
+}
+
+button[class*="bg-red-500"]:hover {
+  background-color: #d32f2f;
+}
+
+.matching-button {
+  background-color: var(--color-gray-900);
+  color: #ffffff;
+}
+
+.matching-button:hover {
+  background-color: var(--color-gray-800);
+}

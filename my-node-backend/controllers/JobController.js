@@ -36,15 +36,12 @@ exports.getJobsByRecruiter = async (req, res) => {
     const { recruiterId, page = 1, pageSize = 10 } = req.query;
 
     try {
-        const query = {
-            recruiter: recruiterId,
-            isApproved: true
-        };
+        const query = { recruiter: recruiterId, isApproved: true };
 
         const jobs = await Job.find(query)
-                              .skip((page - 1) * pageSize)
-                              .limit(Number(pageSize))
-                              .populate('recruiter');
+            .skip((page - 1) * pageSize)
+            .limit(Number(pageSize))
+            .populate('recruiter');
 
         const totalJobs = await Job.countDocuments(query);
         res.status(200).json({ jobs, totalJobs });
@@ -152,9 +149,9 @@ exports.getJobs = async (req, res) => {
         if (search && !semanticSearch) {
             query.$text = { $search: search };
             jobs = await Job.find(query)
-                            .populate('recruiter')
-                            .skip((page - 1) * pageSize)
-                            .limit(Number(pageSize));
+                .populate('recruiter')
+                .skip((page - 1) * pageSize)
+                .limit(Number(pageSize));
         } else if (search && semanticSearch) {
             const allJobs = await Job.find({ isApproved: true }).lean();
             const descriptions = allJobs.map(job => job.description);
@@ -172,9 +169,9 @@ exports.getJobs = async (req, res) => {
             }
         } else {
             jobs = await Job.find(query)
-                            .populate('recruiter')
-                            .skip((page - 1) * pageSize)
-                            .limit(Number(pageSize));
+                .populate('recruiter')
+                .skip((page - 1) * pageSize)
+                .limit(Number(pageSize));
         }
 
         const totalJobs = await Job.countDocuments(query);
@@ -271,11 +268,11 @@ exports.updateApplicationStatus = async (req, res) => {
         const notificationMessage = `Your application for the position ${jobTitle} has been updated to ${status} by ${recruiterName}.`;
 
         await sendNotification(
-            req.user.id, // Recruiter ID
-            'Recruiter',
             candidateId, // Candidate ID
-            'Candidate',
             notificationMessage,
+            'Candidate', // Recipient type
+            req.user.id, // Recruiter ID
+            'Recruiter', // Sender type
             `/applications/${application._id}`
         );
 
@@ -283,24 +280,5 @@ exports.updateApplicationStatus = async (req, res) => {
     } catch (error) {
         console.error("Failed to update application status:", error);
         res.status(500).json({ message: "Failed to update application status", error: error.message });
-    }
-};;
-
-// Helper function to send notifications
-exports.sendNotification = async (senderId, senderType, recipientId, recipientType, message, link) => {
-    try {
-        const notification = new Notification({
-            sender: senderId,
-            senderType: senderType,
-            recipient: recipientId,
-            recipientType: recipientType,
-            message: message,
-            link: link,
-            read: false
-        });
-        await notification.save();
-    } catch (error) {
-        console.error('Error sending notification:', error);
-        throw new Error('Failed to send notification');
     }
 };

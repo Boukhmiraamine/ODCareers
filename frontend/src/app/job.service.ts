@@ -7,8 +7,9 @@ import { AuthService } from './auth-service.service';
   providedIn: 'root',
 })
 export class JobService {
-  private jobUrl = 'http://localhost:3000/api/jobs';
-  private notificationUrl = 'http://localhost:3000/api/notifications';
+  private baseUrl = 'http://localhost:3000';
+  private jobUrl = `${this.baseUrl}/api/jobs`;
+  private notificationUrl = `${this.baseUrl}/api/notifications`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -102,8 +103,8 @@ export class JobService {
         return throwError(() => new Error('Failed to send notification: ' + (error.error?.message || error.statusText)));
       })
     );
-  }  
-  
+  }
+
   getNotifications(): Observable<any> {
     return this.http.get<any>(this.notificationUrl, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
@@ -122,11 +123,34 @@ export class JobService {
     );
   }
 
+  getCandidateNotifications(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.notificationUrl}/candidate/${userId}`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error fetching candidate notifications:', error);
+        return throwError(() => new Error('Failed to fetch candidate notifications: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
   markNotificationRead(notificationId: string): Observable<any> {
     return this.http.put<any>(`${this.notificationUrl}/${notificationId}/read`, {}, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
         console.error('Error marking notification as read:', error);
         return throwError(() => new Error('Failed to mark notification as read: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  scheduleInterview(candidateId: string, recruiterId: string, scheduledDate: Date): Observable<any> {
+    const url = `${this.baseUrl}/api/interviews/schedule`;
+    const body = { candidateId, recruiterId, scheduledDate: scheduledDate.toISOString() }; // Ensure date is serialized correctly
+    
+    console.log("Scheduling interview with body:", body);
+  
+    return this.http.post(url, body, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error scheduling interview:', error);
+        return throwError(() => new Error('Failed to schedule interview: ' + (error.error?.message || error.statusText)));
       })
     );
   }

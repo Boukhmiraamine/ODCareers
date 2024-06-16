@@ -59,7 +59,7 @@ async function getNotificationsForCandidate(req, res) {
         const notifications = await Notification.find({ recipient: req.params.userId, recipientType: 'Candidate' });
         res.status(200).json(notifications);
     } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch notifications', error });
+        res.status500.json({ message: 'Failed to fetch notifications', error });
     }
 }
 
@@ -92,13 +92,41 @@ async function sendNotification(req, res) {
     }
 }
 
-
-module.exports = {
+async function scheduleInterview(req, res) {
+    const { candidateId, recruiterId, scheduledDate } = req.body;
+    try {
+      const interview = new Interview({ candidateId, recruiterId, scheduledDate });
+      await interview.save();
+      
+      // Generate video call link
+      const videoCallLink = `http://yourdomain.com/video-call/${interview._id}`;
+      
+      // Send notification to candidate about scheduled interview
+      const message = `Your interview is scheduled for ${new Date(scheduledDate).toLocaleString()}`;
+      await sendNotification({
+        body: {
+          recipientId: candidateId,
+          message,
+          recipientType: 'Candidate',
+          senderId: recruiterId,
+          senderType: 'Recruiter',
+          link: videoCallLink
+        }
+      });
+  
+      res.status(201).json(interview);
+    } catch (error) {
+      res.status(500).json({ message: 'Error scheduling interview', error });
+    }
+  }
+  
+  module.exports = {
     getAllNotifications,
     getNotification,
     markNotificationRead,
     deleteNotification,
     getNotificationsForRecruiter,
     getNotificationsForCandidate,
-    sendNotification
-};
+    sendNotification,
+    scheduleInterview
+  };
