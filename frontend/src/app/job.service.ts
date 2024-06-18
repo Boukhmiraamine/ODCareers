@@ -143,10 +143,10 @@ export class JobService {
 
   scheduleInterview(candidateId: string, recruiterId: string, scheduledDate: Date): Observable<any> {
     const url = `${this.baseUrl}/api/interviews/schedule`;
-    const body = { candidateId, recruiterId, scheduledDate: scheduledDate.toISOString() }; // Ensure date is serialized correctly
-    
+    const body = { candidateId, recruiterId, scheduledDate: scheduledDate.toISOString() };
+
     console.log("Scheduling interview with body:", body);
-  
+
     return this.http.post(url, body, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
         console.error('Error scheduling interview:', error);
@@ -154,4 +154,16 @@ export class JobService {
       })
     );
   }
+
+  getScheduledInterviews(recruiterId: string): Observable<any> {
+    const url = `${this.baseUrl}/api/interviews/recruiter/${recruiterId}`;
+    return this.http.get<any>(url, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error fetching scheduled interviews:', error);
+        return throwError(() => new Error('Failed to fetch scheduled interviews: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
+  
 }

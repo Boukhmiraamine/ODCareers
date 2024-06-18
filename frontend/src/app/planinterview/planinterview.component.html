@@ -1,12 +1,20 @@
 <form class="m-64" [formGroup]="interviewForm" (ngSubmit)="scheduleInterview()">
-    <mat-form-field>
-      <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose a date" required>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="time" formControlName="time" placeholder="Choose a time" required>
-    </mat-form-field>
-    <button mat-raised-button type="submit" [disabled]="interviewForm.invalid">Schedule Interview</button>
-  </form>
-  
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose a date" required>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="time" formControlName="time" placeholder="Choose a time" required>
+  </mat-form-field>
+  <button mat-raised-button type="submit" [disabled]="interviewForm.invalid">Schedule Interview</button>
+</form>
+
+<div class="scheduled-interviews">
+  <h3>Scheduled Interviews</h3>
+  <div *ngFor="let interview of scheduledInterviews" class="interview-card">
+    <p>Interview with {{ interview.candidate?.fullName || 'Unknown Candidate' }}</p>
+    <p>Scheduled for: {{ interview.scheduledDate | date: 'short' }}</p>
+    <button mat-raised-button color="primary" (click)="joinVideoCall(interview)">Join Video Call</button>
+  </div>
+</div>

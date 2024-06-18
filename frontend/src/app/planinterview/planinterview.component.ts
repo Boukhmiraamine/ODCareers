@@ -1,4 +1,3 @@
-// planinterview.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JobService } from '../job.service';
@@ -13,6 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class PlanInterviewComponent implements OnInit {
   candidateId: string = '';
   interviewForm: FormGroup;
+  scheduledInterviews: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +30,7 @@ export class PlanInterviewComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.candidateId = params.get('candidateId') || '';
+      this.fetchScheduledInterviews();
     });
   }
 
@@ -61,11 +62,30 @@ export class PlanInterviewComponent implements OnInit {
     this.jobService.scheduleInterview(this.candidateId, recruiterId, scheduledDate).subscribe({
       next: (response) => {
         alert('Interview scheduled successfully');
+        this.fetchScheduledInterviews(); // Fetch the updated list of scheduled interviews
         this.router.navigate(['/offres-candidates']);
       },
       error: (error) => {
         console.error('Error scheduling interview:', error);
       }
     });
+  }
+
+  fetchScheduledInterviews(): void {
+    const recruiterId = this.authService.getLoggedInUserId();
+    if (recruiterId) {
+      this.jobService.getScheduledInterviews(recruiterId).subscribe({
+        next: (interviews) => {
+          this.scheduledInterviews = interviews;
+        },
+        error: (error) => {
+          console.error('Error fetching scheduled interviews:', error);
+        }
+      });
+    }
+  }
+
+  joinVideoCall(interview: any): void {
+    this.router.navigate(['/video-call', interview._id]);
   }
 }

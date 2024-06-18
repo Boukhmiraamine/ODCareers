@@ -1,17 +1,15 @@
-// models/Interview.js
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const interviewSchema = new Schema({
   recruiter: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Recruiter',
     required: true
   },
   candidate: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Candidate',
     required: true
   },
   scheduledDate: {

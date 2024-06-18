@@ -52,6 +52,8 @@ import { InterviewComponent } from './interview/interview.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RouterModule } from '@angular/router';
+import { WebRTCService } from './web-rtc.service';
+import { WebSocketService } from './websocket.service';
 
 @NgModule({
   declarations: [
@@ -110,7 +112,12 @@ import { RouterModule } from '@angular/router';
     FileUploadModule,
     ToastModule
   ],
-  providers: [MessageService],
+  providers: [
+    MessageService,
+    WebRTCService,
+    WebSocketService,
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

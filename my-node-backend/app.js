@@ -1,8 +1,8 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const testRoutes = require('./routes/testRoutes');
@@ -16,12 +16,21 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:4200", // Replace with your frontend URL
+    methods: ["GET", "POST"]
+  }
+});
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:4200", // Replace with your frontend URL
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -34,7 +43,7 @@ app.use('/api/recruiters', recruiterRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/interviews', interviewRoutes);
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI)
   .then(() => {
     console.log('MongoDB connected');
     server.listen(port, () => {

@@ -1,5 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { WebRTCService } from '../web-rtc.service';
+import { ActivatedRoute } from '@angular/router';
+import { WebSocketService } from '../websocket.service';
 
 @Component({
   selector: 'app-interview',
@@ -11,15 +13,38 @@ export class InterviewComponent implements OnInit, AfterViewInit {
   @ViewChild('remoteVideo') remoteVideo!: ElementRef<HTMLVideoElement>;
   localStream!: MediaStream;
   remoteStream!: MediaStream;
+  roomId: string = '';
 
-  constructor(private webRTCService: WebRTCService) {}
+  constructor(
+    private webRTCService: WebRTCService,
+    private webSocketService: WebSocketService,
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit() {
-    // Get user media
-    this.localStream = await this.webRTCService.getUserMedia({ video: true, audio: true });
+    try {
+      this.localStream = await this.webRTCService.getUserMedia({ video: true, audio: true });
+      this.remoteStream = this.webRTCService.getRemoteStream();
 
-    // Access the remote stream
-    this.remoteStream = this.webRTCService.getRemoteStream();
+      this.route.paramMap.subscribe(params => {
+        this.roomId = params.get('id') || '';
+        this.webSocketService.joinRoom(this.roomId);
+
+        this.webSocketService.onOffer().subscribe(async (offer: RTCSessionDescriptionInit) => {
+          await this.handleRemoteOffer(offer);
+        });
+
+        this.webSocketService.onAnswer().subscribe(async (answer: RTCSessionDescriptionInit) => {
+          await this.handleRemoteAnswer(answer);
+        });
+
+        this.webSocketService.onCandidate().subscribe((candidate: RTCIceCandidateInit) => {
+          this.handleNewICECandidate(candidate);
+        });
+      });
+    } catch (error) {
+      console.error('Error initializing media:', error);
+    }
   }
 
   ngAfterViewInit() {
@@ -29,18 +54,18 @@ export class InterviewComponent implements OnInit, AfterViewInit {
 
   async startCall() {
     const offer = await this.webRTCService.createOffer();
-    // Send offer to remote peer via signaling server
+    this.webSocketService.sendOffer(this.roomId, offer);
   }
 
   async answerCall() {
     const answer = await this.webRTCService.createAnswer();
-    // Send answer to remote peer via signaling server
+    this.webSocketService.sendAnswer(this.roomId, answer);
   }
 
   async handleRemoteOffer(offer: RTCSessionDescriptionInit) {
     await this.webRTCService.setRemoteDescription(offer);
     const answer = await this.webRTCService.createAnswer();
-    // Send answer to remote peer via signaling server
+    this.webSocketService.sendAnswer(this.roomId, answer);
   }
 
   async handleRemoteAnswer(answer: RTCSessionDescriptionInit) {

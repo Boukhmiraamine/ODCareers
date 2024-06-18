@@ -19,22 +19,32 @@ export class WebRTCService {
 
     this.peerConnection.onicecandidate = (event) => {
       if (event.candidate) {
-        // Handle ICE candidate event
-        // Emit the candidate to the signaling server
+        console.log('Local ICE candidate:', event.candidate);
       }
     };
 
     this.peerConnection.ontrack = (event) => {
       this.remoteStream.addTrack(event.track);
+      console.log('Remote track added:', event.track);
+    };
+
+    this.peerConnection.onconnectionstatechange = () => {
+      console.log('Connection state change:', this.peerConnection.connectionState);
     };
   }
 
   async getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
-    this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
-    this.localStream.getTracks().forEach((track) => {
-      this.peerConnection.addTrack(track, this.localStream);
-    });
-    return this.localStream;
+    try {
+      this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
+      this.localStream.getTracks().forEach((track) => {
+        this.peerConnection.addTrack(track, this.localStream);
+        console.log('Local track added:', track);
+      });
+      return this.localStream;
+    } catch (error) {
+      console.error('Error getting user media:', error);
+      throw error;
+    }
   }
 
   async createOffer(): Promise<RTCSessionDescriptionInit> {
@@ -55,6 +65,7 @@ export class WebRTCService {
 
   addIceCandidate(candidate: RTCIceCandidateInit): void {
     this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    console.log('ICE candidate added:', candidate);
   }
 
   getRemoteStream(): MediaStream {

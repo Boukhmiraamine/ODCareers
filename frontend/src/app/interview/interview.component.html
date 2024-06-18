@@ -1,9 +1,7 @@
-<!-- interview.component.html -->
 <div>
-    <video #localVideo autoplay playsinline muted></video>
-    <video #remoteVideo autoplay playsinline></video>
-  
-    <button (click)="startCall()">Start Call</button>
-    <button (click)="answerCall()">Answer Call</button>
-  </div>
-  
+  <video #localVideo width="400" height="300" autoplay playsinline muted></video>
+  <video #remoteVideo width="400" height="300" autoplay playsinline></video>
+
+  <button (click)="startCall()">Start Call</button>
+  <button (click)="answerCall()">Answer Call</button>
+</div>
