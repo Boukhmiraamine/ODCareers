@@ -46,9 +46,9 @@
                 <mat-tab label="Waiting">
                   <div class="profiles-container">
                     <ng-container *ngIf="waitingCandidates.length > 0; else noWaitingCandidates">
-                      <div *ngFor="let candidate of waitingCandidates" class="relative bg-white shadow rounded-lg p-6 mb-4 ">
+                      <div *ngFor="let candidate of waitingCandidates" class="relative bg-white shadow rounded-lg p-6 mb-4">
                         <div class="absolute top-4 right-4">
-                          <button mat-raised-button class="matching-button" (click)="showMatchingSkills(candidate)">Matching Skills</button>
+                          <button mat-raised-button class="bg-gray-500 text-white hover:bg-gray-600" (click)="showMatchingSkills(candidate)">Matching Skills</button>
                         </div>
                         <div class="flex items-center mb-4">
                           <div class="w-16 h-16 rounded-full bg-gray-200" [style.background-image]="'url(' + candidate.profilePicture + ')'"></div>
@@ -91,7 +91,7 @@
                 <mat-tab label="Accepted">
                   <div class="profiles-container">
                     <ng-container *ngIf="acceptedCandidates.length > 0; else noAcceptedCandidates">
-                      <div *ngFor="let candidate of acceptedCandidates" class="relative bg-white shadow rounded-lg p-6 mb-4 ">
+                      <div *ngFor="let candidate of acceptedCandidates" class="relative bg-white shadow rounded-lg p-6 mb-4">
                         <div class="flex items-center mb-4">
                           <div class="w-16 h-16 rounded-full bg-gray-200" [style.background-image]="'url(' + candidate.profilePicture + ')'"></div>
                           <div class="ml-4">
@@ -115,7 +115,7 @@
                 <mat-tab label="Refused">
                   <div class="profiles-container">
                     <ng-container *ngIf="refusedCandidates.length > 0; else noRefusedCandidates">
-                      <div *ngFor="let candidate of refusedCandidates" class="relative bg-white shadow rounded-lg p-6 mb-4 ">
+                      <div *ngFor="let candidate of refusedCandidates" class="relative bg-white shadow rounded-lg p-6 mb-4">
                         <div class="flex items-center mb-4">
                           <div class="w-16 h-16 rounded-full bg-gray-200" [style.background-image]="'url(' + candidate.profilePicture + ')'"></div>
                           <div class="ml-4">

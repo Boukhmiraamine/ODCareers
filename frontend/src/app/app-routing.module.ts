@@ -1,3 +1,4 @@
+// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeLandingComponent } from './home-landing/home-landing.component';
@@ -15,7 +16,7 @@ import { roleGuard } from './role.guard';
 import { loginGuard } from './login.guard';
 import { ProfilecandidateComponent } from './profilecandidate/profilecandidate.component';
 import { ProfilecandidatesettingsComponent } from './profilecandidatesettings/profilecandidatesettings.component';
-import { PlanInterviewComponent} from './planinterview/planinterview.component';
+import { PlanInterviewComponent } from './planinterview/planinterview.component';
 import { InterviewComponent } from './interview/interview.component';
 
 const routes: Routes = [
@@ -33,7 +34,7 @@ const routes: Routes = [
   { path: 'profile/settings', component: ProfilecandidatesettingsComponent },
   { path: 'jobs/:jobId/applications', component: OffresCandidatesComponent },
   { path: 'plan-interview/:candidateId', component: PlanInterviewComponent },
-  { path: 'video-call/:interviewId', component: InterviewComponent }
+  { path: 'video-call/:interviewId', component: InterviewComponent },
 ];
 
 @NgModule({

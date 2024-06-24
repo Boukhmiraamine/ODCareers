@@ -99,7 +99,7 @@ async function scheduleInterview(req, res) {
       await interview.save();
       
       // Generate video call link
-      const videoCallLink = `http://yourdomain.com/video-call/${interview._id}`;
+      const videoCallLink = `/video-call/${interview._id}`;
       
       // Send notification to candidate about scheduled interview
       const message = `Your interview is scheduled for ${new Date(scheduledDate).toLocaleString()}`;

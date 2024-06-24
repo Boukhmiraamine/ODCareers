@@ -54,6 +54,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RouterModule } from '@angular/router';
 import { WebRTCService } from './web-rtc.service';
 import { WebSocketService } from './websocket.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { WebSocketService } from './websocket.service';
     MatNativeDateModule,
     MatDatepickerModule,
     FileUploadModule,
-    ToastModule
+    ToastModule,
+    FontAwesomeModule
   ],
   providers: [
     MessageService,

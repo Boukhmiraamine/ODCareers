@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { WebRTCService } from '../web-rtc.service';
 import { ActivatedRoute } from '@angular/router';
 import { WebSocketService } from '../websocket.service';
+import { AuthService } from '../auth-service.service';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-interview',
@@ -14,15 +16,29 @@ export class InterviewComponent implements OnInit, AfterViewInit {
   localStream!: MediaStream;
   remoteStream!: MediaStream;
   roomId: string = '';
+  isMuted: boolean = false;
+  isCameraOn: boolean = true;
+  isRemoteCameraOn: boolean = false;
+  localProfilePicture: string = 'path/to/default-local-profile-picture.jpg';
+  remoteProfilePicture: string = 'path/to/default-remote-profile-picture.jpg';
 
   constructor(
     private webRTCService: WebRTCService,
     private webSocketService: WebSocketService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private profileService: ProfileService
   ) {}
 
   async ngOnInit() {
     try {
+      const userId = this.authService.getLoggedInUserId();
+      if (userId) {
+        this.profileService.getProfile(userId).subscribe(profile => {
+          this.localProfilePicture = profile.profilePicture || this.localProfilePicture;
+        });
+      }
+
       this.localStream = await this.webRTCService.getUserMedia({ video: true, audio: true });
       this.remoteStream = this.webRTCService.getRemoteStream();
 
@@ -42,37 +58,80 @@ export class InterviewComponent implements OnInit, AfterViewInit {
           this.handleNewICECandidate(candidate);
         });
       });
+
+      this.setupVideoStreams();
     } catch (error) {
       console.error('Error initializing media:', error);
     }
   }
 
   ngAfterViewInit() {
-    this.localVideo.nativeElement.srcObject = this.localStream;
-    this.remoteVideo.nativeElement.srcObject = this.remoteStream;
+    this.setupVideoStreams();
+  }
+
+  private setupVideoStreams() {
+    if (this.localStream) {
+      this.localVideo.nativeElement.srcObject = this.localStream;
+    }
+
+    if (this.remoteStream) {
+      this.remoteVideo.nativeElement.srcObject = this.remoteStream;
+    }
   }
 
   async startCall() {
-    const offer = await this.webRTCService.createOffer();
-    this.webSocketService.sendOffer(this.roomId, offer);
+    try {
+      const offer = await this.webRTCService.createOffer();
+      this.webSocketService.sendOffer(this.roomId, offer);
+    } catch (error) {
+      console.error('Error creating offer:', error);
+    }
   }
 
   async answerCall() {
-    const answer = await this.webRTCService.createAnswer();
-    this.webSocketService.sendAnswer(this.roomId, answer);
+    try {
+      const answer = await this.webRTCService.createAnswer();
+      this.webSocketService.sendAnswer(this.roomId, answer);
+    } catch (error) {
+      console.error('Error creating answer:', error);
+    }
   }
 
   async handleRemoteOffer(offer: RTCSessionDescriptionInit) {
-    await this.webRTCService.setRemoteDescription(offer);
-    const answer = await this.webRTCService.createAnswer();
-    this.webSocketService.sendAnswer(this.roomId, answer);
+    try {
+      await this.webRTCService.setRemoteDescription(offer);
+      const answer = await this.webRTCService.createAnswer();
+      this.webSocketService.sendAnswer(this.roomId, answer);
+      this.isRemoteCameraOn = true;
+    } catch (error) {
+      console.error('Error handling remote offer:', error);
+    }
   }
 
   async handleRemoteAnswer(answer: RTCSessionDescriptionInit) {
-    await this.webRTCService.setRemoteDescription(answer);
+    try {
+      await this.webRTCService.setRemoteDescription(answer);
+      this.isRemoteCameraOn = true;
+    } catch (error) {
+      console.error('Error handling remote answer:', error);
+    }
   }
 
   handleNewICECandidate(candidate: RTCIceCandidateInit) {
     this.webRTCService.addIceCandidate(candidate);
+  }
+
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    this.localStream.getAudioTracks().forEach(track => track.enabled = !this.isMuted);
+  }
+
+  toggleCamera() {
+    this.isCameraOn = !this.isCameraOn;
+    this.localStream.getVideoTracks().forEach(track => track.enabled = this.isCameraOn);
+  }
+
+  hangUp() {
+    this.webRTCService.hangUp(); // Implement hangUp logic in WebRTCService
   }
 }

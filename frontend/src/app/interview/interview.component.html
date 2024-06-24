@@ -1,7 +1,29 @@
-<div>
-  <video #localVideo width="400" height="300" autoplay playsinline muted></video>
-  <video #remoteVideo width="400" height="300" autoplay playsinline></video>
-
-  <button (click)="startCall()">Start Call</button>
-  <button (click)="answerCall()">Answer Call</button>
+<div class="interview-container">
+  <div class="video-wrapper">
+    <div class="video-box local" [ngClass]="{ 'connected': isRemoteCameraOn }">
+      <video #localVideo class="video" autoplay playsinline muted></video>
+      <img *ngIf="!isCameraOn" src="{{localProfilePicture}}" class="profile-picture" alt="Profile Picture">
+    </div>
+    <div class="video-box remote" [ngClass]="{ 'connected': isRemoteCameraOn }">
+      <video #remoteVideo class="video" autoplay playsinline></video>
+      <img *ngIf="!isRemoteCameraOn" src="{{remoteProfilePicture}}" class="profile-picture" alt="Profile Picture">
+    </div>
+  </div>
+  <div class="controls">
+    <button mat-icon-button (click)="toggleMute()">
+      <mat-icon>{{ isMuted ? 'mic_off' : 'mic' }}</mat-icon>
+    </button>
+    <button mat-icon-button (click)="toggleCamera()">
+      <mat-icon>{{ isCameraOn ? 'videocam_off' : 'videocam' }}</mat-icon>
+    </button>
+    <button mat-icon-button (click)="hangUp()">
+      <mat-icon>call_end</mat-icon>
+    </button>
+    <button mat-icon-button (click)="startCall()">
+      <mat-icon>call</mat-icon>
+    </button>
+    <button mat-icon-button (click)="answerCall()">
+      <mat-icon>phone_in_talk</mat-icon>
+    </button>
+  </div>
 </div>

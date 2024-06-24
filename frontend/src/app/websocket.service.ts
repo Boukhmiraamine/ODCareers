@@ -45,4 +45,10 @@ export class WebSocketService {
   sendCandidate(room: string, candidate: any) {
     this.socket.emit('candidate', { room, candidate });
   }
+
+  onParticipantJoined(): Observable<any> {
+    return new Observable((observer: Observer<any>) => {
+      this.socket.on('participantJoined', (data: any) => observer.next(data));
+    });
+  }
 }

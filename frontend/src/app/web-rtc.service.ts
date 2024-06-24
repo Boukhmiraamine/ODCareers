@@ -31,6 +31,10 @@ export class WebRTCService {
     this.peerConnection.onconnectionstatechange = () => {
       console.log('Connection state change:', this.peerConnection.connectionState);
     };
+
+    this.peerConnection.onsignalingstatechange = () => {
+      console.log('Signaling state change:', this.peerConnection.signalingState);
+    };
   }
 
   async getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
@@ -54,9 +58,14 @@ export class WebRTCService {
   }
 
   async createAnswer(): Promise<RTCSessionDescriptionInit> {
-    const answer = await this.peerConnection.createAnswer();
-    await this.peerConnection.setLocalDescription(answer);
-    return answer;
+    if (this.peerConnection.signalingState === 'have-remote-offer') {
+      const answer = await this.peerConnection.createAnswer();
+      await this.peerConnection.setLocalDescription(answer);
+      return answer;
+    } else {
+      console.error('Cannot create answer: PeerConnection is not in "have-remote-offer" state.');
+      throw new Error('PeerConnection is not in a state to create an answer');
+    }
   }
 
   async setRemoteDescription(sdp: RTCSessionDescriptionInit): Promise<void> {
@@ -70,5 +79,16 @@ export class WebRTCService {
 
   getRemoteStream(): MediaStream {
     return this.remoteStream;
+  }
+
+  getPeerConnectionState(): string {
+    return this.peerConnection.signalingState;
+  }
+
+  hangUp() {
+    this.peerConnection.close();
+    this.localStream.getTracks().forEach(track => track.stop());
+    this.remoteStream.getTracks().forEach(track => track.stop());
+    console.log('Peer connection closed and media streams stopped');
   }
 }

@@ -1,5 +1,93 @@
-video {
-    width: 45%;
-    margin: 10px;
-  }
-  
+.interview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 1200px;
+  height: 80vh;
+}
+
+.video-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 80%;
+  margin-bottom: 20px;
+}
+
+.video-box {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  background-color: #f0f0f0;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.5s ease;
+}
+
+.video-box.local {
+  z-index: 1;
+}
+
+.video-box.remote {
+  z-index: 2;
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.video-box.connected.local {
+  width: calc(50% - 10px); /* Subtract margin for spacing */
+  left: 0;
+  margin-right: 10px; /* Space between videos */
+}
+
+.video-box.connected.remote {
+  width: calc(50% - 10px); /* Subtract margin for spacing */
+  right: 0;
+  margin-left: 10px; /* Space between videos */
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-picture {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+button.mat-icon-button {
+  background-color: #ffffff;
+  color: #333;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button.mat-icon-button:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
+}
+
+button.mat-icon-button:active {
+  background-color: #e0e0e0;
+}

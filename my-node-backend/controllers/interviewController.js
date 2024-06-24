@@ -22,7 +22,7 @@ exports.scheduleInterview = async (req, res) => {
 
     await interview.save();
 
-    const videoCallLink = `http://yourdomain.com/video-call/${interview._id}`;
+    const videoCallLink = `/video-call/${interview._id}`;
 
     const message = `Your interview is scheduled for ${new Date(scheduledDate).toLocaleString()}`;
     await sendNotification({
