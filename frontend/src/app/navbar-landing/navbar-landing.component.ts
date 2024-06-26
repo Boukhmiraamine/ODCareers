@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { JobService } from '../job.service';
+import { ProfileService } from '../profile.service'; // Import ProfileService
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,10 +16,13 @@ export class NavbarLandingComponent implements OnInit {
   loggedInUserId: string | null = null;
   notifications: any[] = [];
   userType: 'Candidate' | 'Recruiter' | null = null;
+  profilePicture: string | null = null; // Add profilePicture
+  fullName: string | null = null; // Add fullName
 
   constructor(
     private authService: AuthService,
     private jobService: JobService,
+    private profileService: ProfileService, // Inject ProfileService
     private router: Router
   ) {}
 
@@ -28,6 +32,7 @@ export class NavbarLandingComponent implements OnInit {
       this.checkLoginStatus();
       if (this.isLoggedIn) {
         this.fetchNotifications();
+        this.fetchUserProfile(); // Fetch user profile details
       }
     });
   }
@@ -37,6 +42,9 @@ export class NavbarLandingComponent implements OnInit {
     this.isLoggedIn = !!token;
     this.loggedInUserId = this.authService.getLoggedInUserId();
     this.userType = this.authService.getLoggedInUserType() as 'Candidate' | 'Recruiter' | null;
+    if (this.isLoggedIn) {
+      this.fetchUserProfile(); // Fetch user profile details on init
+    }
   }
 
   toggleDropdown(): void {
@@ -65,6 +73,32 @@ export class NavbarLandingComponent implements OnInit {
           },
           error => {
             console.error('Error fetching candidate notifications', error);
+          }
+        );
+      }
+    }
+  }
+
+  fetchUserProfile(): void {
+    if (this.loggedInUserId) {
+      if (this.userType === 'Candidate') {
+        this.profileService.getProfile(this.loggedInUserId).subscribe(
+          profile => {
+            this.profilePicture = profile.profilePicture ? `http://localhost:3000${profile.profilePicture}` : 'https://via.placeholder.com/150';
+            this.fullName = profile.fullName;
+          },
+          error => {
+            console.error('Error fetching profile', error);
+          }
+        );
+      } else if (this.userType === 'Recruiter') {
+        this.profileService.getRecruiterProfile(this.loggedInUserId).subscribe(
+          profile => {
+            this.profilePicture = profile.companyLogo ? `http://localhost:3000${profile.companyLogo}` : 'https://via.placeholder.com/150';
+            this.fullName = profile.recruiterFullName;
+          },
+          error => {
+            console.error('Error fetching profile', error);
           }
         );
       }

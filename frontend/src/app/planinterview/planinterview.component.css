@@ -1,0 +1,66 @@
+.container {
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    width: 80%;
+  }
+  
+  .schedule-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .schedule-form .form-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .mat-toolbar {
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .mat-elevation-z1 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h3 {
+    color: black;
+  }
+  
+  mat-form-field {
+    width: auto;
+  }
+  
+  .mat-table th {
+    color: gray;
+  }
+  
+  .mat-table td {
+    color: black;
+  }
+  
+  button.schedule-button {
+    background-color: orange;
+    color: white;
+  }
+  
+  button.schedule-button:hover {
+    background-color: darkorange;
+  }
+  
+  button[mat-icon-button] {
+    color: orange;
+  }
+  
+  button[mat-icon-button]:hover {
+    background-color: lightgray;
+  }
+  

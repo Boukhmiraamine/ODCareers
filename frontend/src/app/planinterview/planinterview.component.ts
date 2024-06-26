@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { JobService } from '../job.service';
 import { AuthService } from '../auth-service.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-plan-interview',
@@ -12,7 +15,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class PlanInterviewComponent implements OnInit {
   candidateId: string = '';
   interviewForm: FormGroup;
-  scheduledInterviews: any[] = [];
+  dataSource = new MatTableDataSource<any>();
+  displayedColumns: string[] = ['candidate', 'date', 'actions'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +38,10 @@ export class PlanInterviewComponent implements OnInit {
       this.candidateId = params.get('candidateId') || '';
       this.fetchScheduledInterviews();
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   scheduleInterview(): void {
@@ -76,7 +86,7 @@ export class PlanInterviewComponent implements OnInit {
     if (recruiterId) {
       this.jobService.getScheduledInterviews(recruiterId).subscribe({
         next: (interviews) => {
-          this.scheduledInterviews = interviews;
+          this.dataSource.data = interviews;
         },
         error: (error) => {
           console.error('Error fetching scheduled interviews:', error);

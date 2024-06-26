@@ -1,11 +1,109 @@
-.display {
-    display: none;
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Optional: Custom CSS for transitions */
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-    opacity: 0;
-  }
+button {
+  font-family: 'Arial', sans-serif;
+}
+
+h1 {
+  color: #333;
+}
+
+.mat-icon-button {
+  color: #FFA500; /* orange color */
+}
+
+.mat-icon-button:hover {
+  color: #FF4500; /* darker orange color */
+}
+
+.mat-menu-item {
+  font-weight: bold;
+  color: #555;
+}
+
+.mat-menu-item:hover {
+  background-color: #FFFAF0; /* light orange background */
+}
+
+input[type="search"] {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.mat-elevation-z1 {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mat-paginator {
+  margin-top: 2rem;
+}
+
+.mat-paginator .mat-button {
+  color: #333;
+}
+
+.mat-paginator .mat-button:hover {
+  background-color: #FFFAF0; /* light orange background */
+}
+
+.job-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s;
+}
+
+.job-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.job-card h3 {
+  color: #FF4500; /* dark orange color */
+}
+
+.job-card p {
+  color: #333;
+}
+
+.job-card .job-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.job-card .job-details span {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.filter-section {
+  margin-bottom: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.mat-menu-item-icon {
+  margin-right: 0.5rem;
+}
+
+.mat-button {
+  background-color: #FFA500; /* orange color */
+  color: white;
+}
+
+.mat-button:hover {
+  background-color: #FF4500; /* darker orange color */
+}

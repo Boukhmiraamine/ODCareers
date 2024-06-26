@@ -16,6 +16,7 @@ interface Job {
   recruiter: {
     _id: string;
     companyName: string;
+    companyLogo: string; // Add companyLogo field
   };
   domain: string;
   function: string;
@@ -104,8 +105,22 @@ export class HomecandidateComponent implements OnInit {
   }
 
   sortBy(criteria: string) {
-    console.log(`Sorting by ${criteria}`);
     this.sortMenuOpen = false;
+    switch (criteria) {
+      case 'newest':
+        this.jobs.sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime());
+        break;
+      case 'oldest':
+        this.jobs.sort((a, b) => new Date(a.publicationDate).getTime() - new Date(b.publicationDate).getTime());
+        break;
+      case 'salaryHighLow':
+        this.jobs.sort((a, b) => b.salary - a.salary);
+        break;
+      case 'salaryLowHigh':
+        this.jobs.sort((a, b) => a.salary - b.salary);
+        break;
+    }
+    this.updatePagedJobs();
   }
 
   toggleGridView() {

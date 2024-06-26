@@ -51,6 +51,7 @@ import { PlanInterviewComponent } from './planinterview/planinterview.component'
 import { InterviewComponent } from './interview/interview.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatToolbarModule } from '@angular/material/toolbar'; // Import MatToolbarModule
 import { RouterModule } from '@angular/router';
 import { WebRTCService } from './web-rtc.service';
 import { WebSocketService } from './websocket.service';
@@ -110,15 +111,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatTableModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatToolbarModule, // Add MatToolbarModule here
     FileUploadModule,
     ToastModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [
     MessageService,
     WebRTCService,
     WebSocketService,
-
   ],
   bootstrap: [AppComponent]
 })

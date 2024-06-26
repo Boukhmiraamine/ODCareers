@@ -26,6 +26,15 @@ export class ProfileService {
     );
   }
 
+  getRecruiterProfile(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.profileUrl}/recruiter/${userId}`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(error => {
+        console.error('Error fetching recruiter profile', error);
+        return throwError(() => new Error('Failed to fetch recruiter profile: ' + (error.error?.message || error.statusText)));
+      })
+    );
+  }
+
   updateProfile(userId: string, formData: FormData): Observable<any> {
     return this.http.put<any>(`${this.profileUrl}/${userId}`, formData, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
@@ -45,8 +54,6 @@ export class ProfileService {
       })
     );
   }
-  
-  
 
   addEducation(education: any): Observable<any> {
     return this.http.post<any>(`${this.profileUrl}/education`, education, { headers: this.getAuthHeaders() }).pipe(

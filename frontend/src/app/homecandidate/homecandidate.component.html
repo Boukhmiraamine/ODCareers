@@ -33,11 +33,10 @@
           </button>
           <div *ngIf="sortMenuOpen" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5">
             <div class="py-1">
-              <a href="#" class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('popularity')">Most Popular</a>
-              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('rating')">Best Rating</a>
-              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('newest')">Newest</a>
-              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryLowHigh')">Salary: Low to High</a>
-              <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryHighLow')">Salary: High to Low</a>
+              <div class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('newest')">Newest</div>
+              <div class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('oldest')">Oldest</div>
+              <div class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryLowHigh')">Salary: Low to High</div>
+              <div class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" (click)="sortBy('salaryHighLow')">Salary: High to Low</div>
             </div>
           </div>
         </div>
@@ -134,10 +133,13 @@
               <mat-card class="transition-all duration-1000 ease-in-out mb-2 bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden" [ngClass]="{'w-5/6': !job.expanded, 'w-11/12': job.expanded}">
                 <mat-card-content>
                   <div class="flex justify-between">
-                    <div>
-                      <div class="text-lg font-bold flex items-center"><i class="fas fa-briefcase mr-2"></i>{{ job.title }}</div>
-                      <div class="text-sm flex items-center"><i class="fas fa-clipboard-list mr-2"></i>{{ job.contractType }}</div>
-                      <div class="text-sm mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }}</div>
+                    <div class="flex items-center">
+                      <img [src]="job.recruiter.companyLogo" alt="{{ job.recruiter.companyName }}" class="w-12 h-12 mr-4">
+                      <div>
+                        <div class="text-lg font-bold flex items-center">{{ job.title }}</div>
+                        <div class="text-sm flex items-center"><i class="fas fa-clipboard-list mr-2"></i>{{ job.contractType }}</div>
+                        <div class="text-sm mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }}</div>
+                      </div>
                     </div>
                     <button mat-icon-button (click)="toggleExpand(job)">
                       <mat-icon>{{ job.expanded ? 'expand_more' : 'expand_less' }}</mat-icon>

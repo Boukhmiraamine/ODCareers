@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
 import { JobService } from '../job.service';
 import { AuthService } from '../auth-service.service';
 import { JobOfferModalViewComponent } from '../job-offer-modal-view/job-offer-modal-view.component';
@@ -45,8 +46,12 @@ export class HomeRecruiterComponent implements OnInit {
   pageSizeOptions = [5, 10, 20];
   currentPage = 0;
   recruiterId: string | null = null;
+  searchQuery: string = '';
+  dataSource = new MatTableDataSource<Job>([]);
+  filterSections: { [key: string]: boolean } = {
+    location: false,
+  };
 
-  jobOffers: Job[] = [];
   dropdowns: { sort: boolean; filters: boolean } = {
     sort: false,
     filters: false
@@ -57,7 +62,7 @@ export class HomeRecruiterComponent implements OnInit {
     private snackBar: MatSnackBar,
     private jobService: JobService,
     private authService: AuthService,
-    private router: Router // Inject Router
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +76,7 @@ export class HomeRecruiterComponent implements OnInit {
         response => {
           if (response && response.jobs) {
             console.log("Jobs loaded:", response.jobs);
-            this.jobOffers = response.jobs.map((job: Job) => ({
+            this.dataSource.data = response.jobs.map((job: Job) => ({
               ...job,
               expanded: false,
               showMatchingSkills: false
@@ -113,10 +118,10 @@ export class HomeRecruiterComponent implements OnInit {
       width: '600px',
       data: { job }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'updated') {
-        this.loadJobOffers(); // Refresh the list
+        this.loadJobOffers();
         this.snackBar.open('Job offer updated successfully', 'Close', { duration: 3000 });
       }
     });
@@ -144,7 +149,35 @@ export class HomeRecruiterComponent implements OnInit {
     this.dropdowns[type] = !this.dropdowns[type];
   }
 
-  // New method to navigate to the OffresCandidatesComponent
+  filterJobOffers(): void {
+    if (this.searchQuery.trim()) {
+      this.dataSource.filter = this.searchQuery.trim().toLowerCase();
+    } else {
+      this.dataSource.filter = '';
+    }
+  }
+
+  toggleFilterSection(section: string): void {
+    this.filterSections[section] = !this.filterSections[section];
+  }
+
+  sortJobs(criteria: 'newest' | 'oldest' | 'highestSalary' | 'lowestSalary'): void {
+    switch (criteria) {
+      case 'newest':
+        this.dataSource.data.sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime());
+        break;
+      case 'oldest':
+        this.dataSource.data.sort((a, b) => new Date(a.publicationDate).getTime() - new Date(b.publicationDate).getTime());
+        break;
+      case 'highestSalary':
+        this.dataSource.data.sort((a, b) => b.salary - a.salary);
+        break;
+      case 'lowestSalary':
+        this.dataSource.data.sort((a, b) => a.salary - b.salary);
+        break;
+    }
+  }
+
   viewCandidates(jobId: string): void {
     this.router.navigate(['/jobs', jobId, 'applications']);
   }

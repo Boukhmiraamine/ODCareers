@@ -28,7 +28,6 @@
         <div routerLink="/contact" class="text-base font-semibold text-orange-500 hover:text-orange-600 transition-all duration-200"> Contact </div>
         <div *ngIf="!isLoggedIn" routerLink="/login" class="inline-flex items-center justify-center px-4 py-2 text-base font-semibold transition-all duration-200 rounded-full bg-orange-500 text-white hover:bg-orange-700 focus:bg-orange-600"> Log-in </div>
         
-
         <div *ngIf="isLoggedIn" class="relative inline-block text-left ml-4">
           <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-transparent" (click)="toggleNotificationDropdown()">
             <i class="fas fa-bell text-xl text-orange-600"></i>
@@ -51,15 +50,14 @@
           </div>
         </div>
 
-
         <div *ngIf="isLoggedIn" class="relative inline-block text-left">
           <button type="button" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200" (click)="toggleDropdown()">
-            <img class="w-full h-full rounded-full" src="https://via.placeholder.com/150" alt="Avatar">
+            <img class="w-full h-full rounded-full" [src]="profilePicture" alt="Avatar">
           </button>
           <div *ngIf="dropdownOpen" class="absolute right-0 w-48 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none" role="menu">
             <div class="px-4 py-3">
               <p class="text-sm leading-5">Signed in as</p>
-              <p class="text-sm font-medium leading-5 text-gray-900 truncate">{{ loggedInUserId }}</p>
+              <p class="text-sm font-medium leading-5 text-gray-900 truncate">{{ fullName }}</p>
             </div>
             <div class="py-1">
               <a routerLink="/profile" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Profile</a>
