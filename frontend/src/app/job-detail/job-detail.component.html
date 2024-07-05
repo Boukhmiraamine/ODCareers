@@ -1,7 +1,7 @@
 <div *ngIf="job; else noJob" class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md mt-20 mb-20">
   <div class="bg-secondary-light p-6 rounded-lg shadow-md mb-6">
     <div class="flex flex-col lg:flex-row items-start lg:items-center">
-      <img [src]="job.recruiter.companyLogo" alt="{{ job.recruiter.companyName }}" class="w-24 h-24 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-lg">
+      <img [src]="'http://localhost:3000/' + job.recruiter.companyLogo" alt="{{ job.recruiter.companyName }}" class="w-24 h-24 object-cover mb-4 lg:mb-0 lg:mr-6 rounded-lg">
       <div class="flex-1">
         <h1 class="text-2xl font-bold text-black flex items-center"><i class="fas fa-briefcase mr-2"></i>{{ job.title }}</h1>
         <h2 class="text-xl font-semibold text-secondary flex items-center"><i class="fas fa-building mr-2"></i>{{ job.recruiter.companyName }}</h2>

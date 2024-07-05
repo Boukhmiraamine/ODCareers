@@ -134,9 +134,10 @@
                 <mat-card-content>
                   <div class="flex justify-between">
                     <div class="flex items-center">
-                      <img [src]="job.recruiter.companyLogo" alt="{{ job.recruiter.companyName }}" class="w-12 h-12 mr-4">
+                      <img  [src]="'http://localhost:3000/' + job.recruiter.companyLogo" alt="{{ job.recruiter.companyName }}" class="w-12 h-12 mr-4">
                       <div>
                         <div class="text-lg font-bold flex items-center">{{ job.title }}</div>
+                        <div class="text-sm flex items-center"><i class="fas fa-building mr-2"></i>{{ job.recruiter.companyName }}</div>
                         <div class="text-sm flex items-center"><i class="fas fa-clipboard-list mr-2"></i>{{ job.contractType }}</div>
                         <div class="text-sm mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>{{ job.city }}</div>
                       </div>

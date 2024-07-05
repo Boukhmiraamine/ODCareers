@@ -31,14 +31,16 @@ export class AuthService {
     return !!localStorage.getItem('authToken');
   }
 
-  login(credentials: { username: string; password: string; userType: string }): Observable<any> {
+  login(credentials: { username: string; password: string; mfaCode?: string }): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/signin`, credentials, { observe: 'response' }).pipe(
       tap(response => {
         const userData = response.body;
-        if (userData && userData.user.role) {
+        if (userData && userData.token) {
           this.setAuthData(userData.token, userData.user.role, userData.user.id);
           const redirectRoute = userData.user.role === 'Recruiter' ? '/homerecruiter' : '/homecandidate';
           this.router.navigate([redirectRoute]);
+        } else if (userData && userData.mfaRequired) {
+          // Handle MFA required
         }
       }),
       catchError(error => {

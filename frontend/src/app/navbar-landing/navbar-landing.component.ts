@@ -94,8 +94,9 @@ export class NavbarLandingComponent implements OnInit {
       } else if (this.userType === 'Recruiter') {
         this.profileService.getRecruiterProfile(this.loggedInUserId).subscribe(
           profile => {
-            this.profilePicture = profile.companyLogo ? `http://localhost:3000${profile.companyLogo}` : 'https://via.placeholder.com/150';
+            this.profilePicture = profile.companyLogo ? `http://localhost:3000/${profile.companyLogo}` : 'https://via.placeholder.com/150';
             this.fullName = profile.recruiterFullName;
+            console.log(profile.companyLogo)
           },
           error => {
             console.error('Error fetching profile', error);

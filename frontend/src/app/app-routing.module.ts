@@ -1,4 +1,3 @@
-// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeLandingComponent } from './home-landing/home-landing.component';
@@ -29,7 +28,7 @@ const routes: Routes = [
   { path: 'homerecruiter', component: HomeRecruiterComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Recruiter' } },
   { path: 'homecandidate', component: HomecandidateComponent, canActivate: [authGuard, roleGuard], data: { expectedRole: 'Candidate' } },
   { path: 'offresCandidates/:jobId', component: OffresCandidatesComponent },
-  { path: 'job-detail', component: JobDetailComponent },
+  { path: 'job-detail', component: JobDetailComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfilecandidateComponent },
   { path: 'profile/settings', component: ProfilecandidatesettingsComponent },
   { path: 'jobs/:jobId/applications', component: OffresCandidatesComponent },

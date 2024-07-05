@@ -2,6 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const speakeasy = require('speakeasy');
 const Recruiter = require('../models/Recruiter');
 const Candidate = require('../models/Candidate');
 const Admin = require('../models/Admin');
@@ -67,51 +68,56 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  const { userType, username, password } = req.body;
-  let Model;
+  const { username, password, mfaCode } = req.body;
 
-  switch (userType) {
-    case 'Recruiter':
-      Model = Recruiter;
-      break;
-    case 'Candidate':
-      Model = Candidate;
-      break;
-    case 'Admin':
-      Model = Admin;
-      break;
-    default:
-      return res.status(400).json({ message: "Invalid user type" });
+  let user = await Recruiter.findOne({ username }) || await Candidate.findOne({ username }) || await Admin.findOne({ username });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
   }
 
-  try {
-    const user = await Model.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid password" });
-    }
-
-    const payload = {
-      user: {
-        id: user.id,
-        role: userType 
-      }
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET, 
-      { expiresIn: 36000 }, 
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token: `Bearer ${token}`, user: { id: user.id, username: user.username, role: userType } });
-      }
-    );
-
-  } catch (error) {
-    res.status(500).json({ message: "Login failed", error: error.message });
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Invalid password" });
   }
+
+  let userType;
+  if (user instanceof Recruiter) {
+    userType = 'Recruiter';
+  } else if (user instanceof Candidate) {
+    userType = 'Candidate';
+  } else if (user instanceof Admin) {
+    userType = 'Admin';
+  }
+
+  // Check for MFA requirement
+  if (user.mfaEnabled && !mfaCode) {
+    return res.json({ mfaRequired: true });
+  } else if (user.mfaEnabled && mfaCode) {
+    const isMfaCodeValid = speakeasy.totp.verify({
+      secret: user.mfaSecret,
+      encoding: 'base32',
+      token: mfaCode
+    });
+    if (!isMfaCodeValid) {
+      return res.status(401).json({ message: "Invalid MFA code" });
+    }
+  }
+
+  const payload = {
+    user: {
+      id: user.id,
+      role: userType
+    }
+  };
+
+  jwt.sign(
+    payload,
+    process.env.JWT_SECRET,
+    { expiresIn: 36000 },
+    (err, token) => {
+      if (err) throw err;
+      res.json({ token: `Bearer ${token}`, user: { id: user.id, username: user.username, role: userType } });
+    }
+  );
 };

@@ -1,3 +1,4 @@
+// job-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,6 +28,7 @@ export class JobDetailComponent implements OnInit {
 
     if (this.job) {
       console.log('Job details:', this.job);
+      console.log('Company Logo URL:', 'http://localhost:3000/' + this.job.recruiter.companyLogo);
     } else {
       console.error('No job data available');
       this.router.navigate(['/homecandidate']); // Redirect to home if no job data
@@ -39,6 +41,7 @@ export class JobDetailComponent implements OnInit {
       this.snackBar.open('You must be logged in to apply for a job.', 'Close', {
         duration: 3000
       });
+      this.router.navigate(['/login']);
       return;
     }
 

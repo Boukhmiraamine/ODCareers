@@ -16,7 +16,7 @@ interface Job {
   recruiter: {
     _id: string;
     companyName: string;
-    companyLogo: string; // Add companyLogo field
+    companyLogo: string;
   };
   domain: string;
   function: string;
@@ -67,10 +67,13 @@ export class HomecandidateComponent implements OnInit {
   ngOnInit(): void {
     this.jobService.getJobs().subscribe(
       (jobs: any) => {
-        this.jobs = jobs.map((job: any) => ({
-          ...job,
-          expanded: false,
-        }));
+        this.jobs = jobs.map((job: any) => {
+          console.log('Company Logo:', job.recruiter.companyLogo); // Add this line to log the company logo
+          return {
+            ...job,
+            expanded: false,
+          };
+        });
         this.updatePagedJobs();
       },
       error => {
@@ -105,7 +108,6 @@ export class HomecandidateComponent implements OnInit {
   }
 
   sortBy(criteria: string) {
-    this.sortMenuOpen = false;
     switch (criteria) {
       case 'newest':
         this.jobs.sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime());
@@ -113,14 +115,15 @@ export class HomecandidateComponent implements OnInit {
       case 'oldest':
         this.jobs.sort((a, b) => new Date(a.publicationDate).getTime() - new Date(b.publicationDate).getTime());
         break;
-      case 'salaryHighLow':
-        this.jobs.sort((a, b) => b.salary - a.salary);
-        break;
       case 'salaryLowHigh':
         this.jobs.sort((a, b) => a.salary - b.salary);
         break;
+      case 'salaryHighLow':
+        this.jobs.sort((a, b) => b.salary - a.salary);
+        break;
     }
     this.updatePagedJobs();
+    this.sortMenuOpen = false;
   }
 
   toggleGridView() {
